@@ -34,14 +34,14 @@ function App() {
   };
 
   return (
-    <div className="text-gray-800 font-inter">
+    <div className="text-[#003431] font-inter">
       <SideBar ref={sidebarMenuRef} />
       <div
         className="fixed top-0 left-0 w-full h-full bg-black/50 z-40 md:hidden sidebar-overlay"
         onClick={handleSideBar}
       ></div>
       <main
-        className="w-full md:w-[calc(100%-256px)] md:ml-64 bg-teal-50 min-h-screen transition-all main"
+        className="w-full md:w-[calc(100%-256px)] md:ml-64 bg-white min-h-screen transition-all main"
         ref={mainRef}
       >
         <NavBar sidebarToggle={handleSideBarToggle}/>
