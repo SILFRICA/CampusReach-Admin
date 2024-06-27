@@ -1,7 +1,11 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, MouseEvent } from 'react'
 import 'boxicons'
 
-const NavBar: React.FC = () => {
+interface NavBarProps {
+    sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
+}
+
+const NavBar: React.FC<NavBarProps> = ({sidebarToggle}) => {
     const handleFullScreenMode = () => {
         if (document.fullscreenElement) {
             document.exitFullscreen();
@@ -17,7 +21,7 @@ const NavBar: React.FC = () => {
     }
   return (
     <div className="py-2 px-6 bg-teal-50 flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
-            <button type="button" className="text-lg text-gray-900 font-semibold sidebar-toggle">
+            <button type="button" className="text-lg text-gray-900 font-semibold sidebar-toggle" onClick={sidebarToggle}>
                 <box-icon name='menu'></box-icon>
             </button>
 

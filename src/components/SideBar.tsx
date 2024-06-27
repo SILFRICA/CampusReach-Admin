@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 
-const SideBar: React.FC = () => {
+const SideBar = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
   return (
-    <div className="fixed left-0 top-0 w-64 h-full bg-teal-50 p-4 z-50 sidebar-menu transition-transform">
+    <div className="fixed left-0 top-0 w-64 h-full bg-teal-50 p-4 z-50 sidebar-menu transition-transform" ref={ref}>
         <a href="#" className="flex items-center pb-4 border-b border-b-gray-800">
 
             <h2 className="font-bold text-2xl">Campus <span className="bg-[#00caac] text-white px-2 rounded-md">Connect</span></h2>
@@ -76,6 +76,6 @@ const SideBar: React.FC = () => {
         </ul>
     </div>
   )
-}
+});
 
 export default SideBar
