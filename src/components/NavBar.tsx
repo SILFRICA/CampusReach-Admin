@@ -1,17 +1,22 @@
-import React, { FormEvent, MouseEvent } from "react";
+import React, { FormEvent, MouseEvent, useRef } from "react";
 import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
-
 
 interface NavBarProps {
   sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
+  const dropDownRef = useRef<HTMLUListElement>(null);
   const handleFullScreenMode = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
     } else {
       document.documentElement.requestFullscreen();
+    }
+  };
+  const handleDropDownState = () => {
+    if (dropDownRef.current) {
+      dropDownRef.current.classList.toggle("hidden");
     }
   };
   const handleLogout = (event: FormEvent) => {
@@ -28,7 +33,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         className="text-lg text-[#003431] font-semibold sidebar-toggle"
         onClick={sidebarToggle}
       >
-        <Bars3BottomLeftIcon className="w-8 h-8"/>
+        <Bars3BottomLeftIcon className="w-8 h-8" />
       </button>
 
       <ul className="ml-auto flex items-center">
@@ -110,7 +115,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
           </svg>
         </button>
 
-        <li className="dropdown ml-3">
+        <li className="dropdown ml-3" onClick={handleDropDownState}>
           <button type="button" className="dropdown-toggle flex items-center">
             <div className="flex-shrink-0 w-10 h-10 relative">
               <div className="p-1 bg-white rounded-full focus:outline-none focus:ring">
@@ -128,7 +133,10 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
               <p className="text-xs text-[#0c554d]">Administrator</p>
             </div>
           </button>
-          <ul className="dropdown-menu shadow-md shadow-black/5 z-30 hidden py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]">
+          <ul
+            className="dropdown-menu absolute shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
+            ref={dropDownRef}
+          >
             <li>
               <a
                 href="#"
