@@ -1,4 +1,5 @@
 import React from "react";
+import TeamsIcon from "../assets/teams.svg";
 
 const HomeSection: React.FC = () => {
   return (
@@ -24,10 +25,10 @@ const HomeSection: React.FC = () => {
         <div className="bg-[#00a490] rounded-md border border-gray-100 p-6 shadow-md shadow-black/5">
           <div className="flex justify-between mb-4">
             <div>
-              <div className="flex items-center mb-1">
+              <div className="flex items-center mb-1 gap-2">
                 <div className="text-2xl font-semibold">100</div>
-                <div className="p-1 rounded bg-emerald-500/10 text-emerald-500 text-[12px] font-semibold leading-none ml-2">
-                  +30%
+                <div className="p-1 rounded bg-[#028374] rounded-full">
+                  <img src={TeamsIcon} alt="teams-icon" className="text-current w-5 h-5"/>
                 </div>
               </div>
               <div className="text-sm font-medium">Campus Population</div>
