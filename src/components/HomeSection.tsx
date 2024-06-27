@@ -10,9 +10,7 @@ const HomeSection: React.FC = () => {
               <div className="flex items-center mb-1">
                 <div className="text-2xl font-semibold">2</div>
               </div>
-              <div className="text-sm font-medium">
-                Number of Channels
-              </div>
+              <div className="text-sm font-medium">Number of Channels</div>
             </div>
           </div>
 
@@ -32,9 +30,7 @@ const HomeSection: React.FC = () => {
                   +30%
                 </div>
               </div>
-              <div className="text-sm font-medium">
-                Campus Population
-              </div>
+              <div className="text-sm font-medium">Campus Population</div>
             </div>
           </div>
           <a
@@ -48,9 +44,7 @@ const HomeSection: React.FC = () => {
           <div className="flex justify-between mb-6">
             <div>
               <div className="text-2xl font-semibold mb-1">100</div>
-              <div className="text-sm font-medium">
-                Number of Posts created
-              </div>
+              <div className="text-sm font-medium">Number of Posts created</div>
             </div>
           </div>
           <a
