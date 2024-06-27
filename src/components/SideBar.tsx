@@ -35,7 +35,7 @@ const SideBar = forwardRef<
             </li>
           ))}
       </ul>
-      <div className="absolute bottom-2 w-full border-t-2">
+      <div className="absolute bottom-2 w-56 lg:w-full border-t-2">
         <a href="/logout" className="flex justify-between font-semibold items-center py-2 px-4 rounded-md text-red-600 hover:bg-red-800 hover:text-white transition-colors">
           <span>Logout</span>
           <PowerIcon className="w-4 h-4"/>
