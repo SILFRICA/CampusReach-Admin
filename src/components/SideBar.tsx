@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
-import { HomeIcon, UserCircleIcon, BoltIcon } from "@heroicons/react/20/solid";
+import { HomeIcon, UserCircleIcon, BoltIcon, PowerIcon } from "@heroicons/react/20/solid";
 
 const SideBar = forwardRef<
   HTMLDivElement,
@@ -26,15 +26,21 @@ const SideBar = forwardRef<
           SideBarData.name.map((nav, index) => (
             <li className="mb-1 group">
               <a
-                href=""
+                href={nav.url}
                 className="flex font-semibold items-center py-2 px-4 text-[#003431] hover:bg-[#00a490] hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 transition-colors"
               >
                 {SidebarIcons[index]}
-                <span className="text-sm">{nav}</span>
+                <span className="text-sm">{nav.title}</span>
               </a>
             </li>
           ))}
       </ul>
+      <div className="absolute bottom-2 w-full border-t-2">
+        <a href="/logout" className="flex justify-between font-semibold items-center py-2 px-4 rounded-md text-red-600 hover:bg-red-800 hover:text-white transition-colors">
+          <span>Logout</span>
+          <PowerIcon className="w-4 h-4"/>
+        </a>
+      </div>
     </div>
   );
 });

@@ -1,3 +1,16 @@
 {
-   "name": ["Dashboard", "Admins", "Action"]
+   "name": [
+      {
+         "title": "Dashboard",
+         "url": "/"
+      },
+      {
+         "title": "Admins",
+         "url": "/manage-admins"
+      },
+      {
+         "title": "Actions",
+         "url": "/create-channel"
+      }
+   ]
 }
