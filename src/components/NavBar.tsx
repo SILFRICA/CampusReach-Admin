@@ -1,5 +1,6 @@
 import React, { FormEvent, MouseEvent } from "react";
-import { MenuButtonWideFill } from "react-bootstrap-icons";
+import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
+
 
 interface NavBarProps {
   sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
@@ -27,7 +28,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         className="text-lg text-[#003431] font-semibold sidebar-toggle"
         onClick={sidebarToggle}
       >
-        <MenuButtonWideFill />
+        <Bars3BottomLeftIcon className="w-8 h-8"/>
       </button>
 
       <ul className="ml-auto flex items-center">
