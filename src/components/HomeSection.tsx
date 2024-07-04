@@ -38,6 +38,13 @@ const HomeSection: React.FC = () => {
           urlTitle="View"
         />
       </div>
+      <div className="absolute bottom-4 w-9/12">
+        <span className="flex items-center justify-center">
+          <span className="h-px flex-1 bg-black"></span>
+          <span className="shrink-0 px-6">We are cooking something otherworldly!</span>
+          <span className="h-px flex-1 bg-black"></span>
+        </span>
+      </div>
     </div>
   );
 };

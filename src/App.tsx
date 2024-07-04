@@ -12,6 +12,7 @@ import HomeSection from "./components/HomeSection";
 import LoginSection from "./pages/auth/LoginSection";
 import HomePage from "./pages/dashboard/HomePage";
 import ManageAdmins from "./pages/dashboard/admins/ManageAdmins";
+import ChannelSection from "./pages/dashboard/channel/ChannelSection";
 
 function App() {
   return (
@@ -23,9 +24,7 @@ function App() {
           <Route path="/dashboard" element={<PrivateRoute><PageLayout/></PrivateRoute>}>
             <Route index element={<HomeSection />} />
             <Route path="manage-admins" element={<ManageAdmins />} />
-            <Route path="create-channel" element={
-              <div className="text-blue-800 text-xl min-h-screen bg-gray-950 flex justify-center items-center">Create Channel Page Here</div>
-            } />
+            <Route path="create-channel" element={<ChannelSection />} />
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
