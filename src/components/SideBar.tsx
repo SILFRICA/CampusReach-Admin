@@ -1,5 +1,6 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
 import {
@@ -13,6 +14,7 @@ const SideBar = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >((props, ref) => {
+  const { logout } = useContext(AuthContext);
   const SidebarIcons = [
     <HomeIcon className="w-4 h-4" />,
     <UserCircleIcon className="w-4 h-4" />,
@@ -42,7 +44,7 @@ const SideBar = forwardRef<
           ))}
       </ul>
       <div className="absolute bottom-2 w-56 lg:w-full border-t-2">
-        <div className="flex justify-between font-semibold items-center py-2 px-4 rounded-md text-red-600 cursor-pointer hover:bg-red-800 hover:text-white transition-colors">
+        <div className="flex justify-between font-semibold items-center py-2 px-4 rounded-md text-red-600 cursor-pointer hover:bg-red-800 hover:text-white transition-colors" onClick={logout}>
           <span>Logout</span>
           <PowerIcon className="w-4 h-4" />
         </div>

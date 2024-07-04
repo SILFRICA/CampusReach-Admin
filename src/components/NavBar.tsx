@@ -1,4 +1,5 @@
-import React, { FormEvent, MouseEvent, useRef } from "react";
+import React, { FormEvent, MouseEvent, useRef, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
 
 interface NavBarProps {
@@ -6,6 +7,7 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
+  const { logout } = useContext(AuthContext);
   const dropDownRef = useRef<HTMLUListElement>(null);
   const handleFullScreenMode = () => {
     if (document.fullscreenElement) {
@@ -23,6 +25,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
     event.preventDefault();
     // send post request to api
     // clear storage session data
+    logout();
     // redirect to login
   };
 
@@ -134,7 +137,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
             </div>
           </button>
           <ul
-            className="dropdown-menu absolute shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
+            className="dropdown-menu hidden absolute shadow-md shadow-black/5 z-30 py-1.5 rounded-md bg-white border border-gray-100 w-full max-w-[140px]"
             ref={dropDownRef}
           >
             <li>

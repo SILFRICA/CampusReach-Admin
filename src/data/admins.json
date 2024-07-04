@@ -1,0 +1,68 @@
+[
+    {
+        "name": "John Doe",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$10,000"
+    },
+    {
+        "name": "John Devo",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$80,000"
+    },
+    {
+        "name": "Brent Doe",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$60,000"
+    },
+    {
+        "name": "Julian Doe",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$30,000"
+    },
+    {
+        "name": "Karla Smith",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$50,000"
+    },
+    {
+        "name": "John Doe",
+        "birthdate": "24/05/1995",
+        "occupation": "Web Developer",
+        "salary": "$120,000"
+    },
+    {
+        "name": "Jane Doe",
+        "birthdate": "04/11/1980",
+        "occupation": "Web Designer",
+        "salary": "$100,000"
+    },
+    {
+        "name": "Gary Barlow",
+        "birthdate": "24/05/1995",
+        "occupation": "Singer",
+        "salary": "$20,000"
+    },
+    {
+        "name": "Patrick Barlow",
+        "birthdate": "24/05/1995",
+        "occupation": "Singer",
+        "salary": "$60,000"
+    },
+    {
+        "name": "Mishak Bar",
+        "birthdate": "24/05/1995",
+        "occupation": "Singer",
+        "salary": "$80,000"
+    },
+    {
+        "name": "Pedro Pablo",
+        "birthdate": "24/05/1995",
+        "occupation": "Actor",
+        "salary": "$200,000"
+    }
+]
