@@ -1,13 +1,14 @@
 import React, { FormEvent, MouseEvent, useRef, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
+import { truncateString } from "../helpers/TruncateString";
 
 interface NavBarProps {
   sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
-  const { logout } = useContext(AuthContext);
+  const { logout, userData } = useContext(AuthContext);
   const dropDownRef = useRef<HTMLUListElement>(null);
   const handleFullScreenMode = () => {
     if (document.fullscreenElement) {
@@ -132,7 +133,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
               </div>
             </div>
             <div className="p-2 md:block text-left">
-              <h2 className="text-sm font-semibold text-[#003431]">John Doe</h2>
+              <h2 className="text-sm font-semibold text-[#003431]">{truncateString(userData.email, 8)}</h2>
               <p className="text-xs text-[#0c554d]">Administrator</p>
             </div>
           </button>
