@@ -17,8 +17,12 @@ const ChannelSection: React.FC = () => {
           </label>
 
           <select id="Tab" className="w-full rounded-md border-teal-200">
-            <option onSelect={() => handleActiveTab("channel")}>Create Channel</option>
-            <option selected onSelect={() => handleActiveTab("excel")}>Import Excel Sheet</option>
+            <option onSelect={() => handleActiveTab("channel")}>
+              Create Channel
+            </option>
+            <option selected onSelect={() => handleActiveTab("excel")}>
+              Import Excel Sheet
+            </option>
           </select>
         </div>
 
@@ -27,7 +31,11 @@ const ChannelSection: React.FC = () => {
             <nav className="-mb-px flex gap-6" aria-label="Tabs">
               <a
                 href="#"
-                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${activeTab === 'channel' ? "border-teal-300 text-teal-700" : "border-transparent hover:border-teal-300 hover:text-teal-700"} px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
+                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
+                  activeTab === "channel"
+                    ? "border-teal-300 text-teal-700"
+                    : "border-transparent hover:border-teal-300 hover:text-teal-700"
+                } px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
                 onClick={() => handleActiveTab("channel")}
               >
                 <svg
@@ -49,7 +57,11 @@ const ChannelSection: React.FC = () => {
 
               <a
                 href="#"
-                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${activeTab === 'excel' ? "border-teal-300 text-teal-700" : "border-transparent hover:border-teal-300 hover:text-teal-700"} px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
+                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
+                  activeTab === "excel"
+                    ? "border-teal-300 text-teal-700"
+                    : "border-transparent hover:border-teal-300 hover:text-teal-700"
+                } px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
                 onClick={() => handleActiveTab("excel")}
               >
                 <svg
@@ -73,20 +85,30 @@ const ChannelSection: React.FC = () => {
         </div>
       </div>
       <br />
-      <div className="h-48 flex justify-center items-center border border-gray-300 rounded-md text-center">
+      <div className="h-48 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
         {activeTab === "channel" ? (
-          <h3 className="font-bold">
-            Kindly use our mobile app to proceed forward!😇
-          </h3>
+          <small className="text-red-600">
+            ⚠ Kindly use our mobile app to proceed with this action!
+          </small>
         ) : (
-          <div className="flex items-center justify-center gap-2 flex-wrap cursor-pointer hover:bg-gray-50 w-full">
-            <label htmlFor="excelSheet">Upload Sheet</label>
-            <input
-              type="file"
-              name="excel_sheet"
-              id="excelSheet"
-              className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
-            />
+          <div className="flex flex-col gap-3 justify-center">
+            <div className="p-2 border border-gray-300 rounded-md flex gap-2 items-center">
+              <small className="text-red-600">
+                ⚠ Please use our template to fill your data.
+              </small>
+              <a href="/favicon.svg" type="download" className="underline">
+                download here!
+              </a>
+            </div>
+            <div className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full">
+              <label htmlFor="excelSheet">Upload Sheet</label>
+              <input
+                type="file"
+                name="excel_sheet"
+                id="excelSheet"
+                className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
+              />
+            </div>
           </div>
         )}
       </div>
