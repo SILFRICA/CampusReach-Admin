@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet } from "react-router-dom";
-import { MouseEvent, useRef } from "react";
+import { useRef } from "react";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 
@@ -9,7 +9,7 @@ const PageLayout: React.FC = () => {
   const sidebarMenuRef = useRef<HTMLDivElement>(null);
   const sidebarOverlayRef = useRef<HTMLDivElement>(null);
 
-  const handleSideBar = (event: MouseEvent<HTMLDivElement>) => {
+  const handleSideBar = () => {
     if (mainRef.current) {
       mainRef.current.classList.add("active");
     }

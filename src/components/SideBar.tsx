@@ -43,6 +43,11 @@ const SideBar = forwardRef<
             </li>
           ))}
       </ul>
+      {props && (
+        <ul>
+          {props.children}
+        </ul>
+      )}
       <div className="absolute bottom-2 w-56 lg:w-full border-t-2">
         <div className="flex justify-between font-semibold items-center py-2 px-4 rounded-md text-red-600 cursor-pointer hover:bg-red-800 hover:text-white transition-colors" onClick={logout}>
           <span>Logout</span>
