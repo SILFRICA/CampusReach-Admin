@@ -1,5 +1,4 @@
 import React, { forwardRef, useContext } from "react";
-import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
@@ -33,13 +32,13 @@ const SideBar = forwardRef<
         {SideBarData &&
           SideBarData.name.map((nav, index) => (
             <li className="mb-1 group" key={index}>
-              <Link
-                to={nav.url}
+              <a
+                href={nav.url}
                 className="flex font-semibold items-center py-2 px-4 text-[#003431] hover:bg-[#00a490] hover:text-gray-100 rounded-md group-[.active]:bg-gray-800 group-[.active]:text-white group-[.selected]:bg-gray-950 group-[.selected]:text-gray-100 transition-colors"
               >
                 {SidebarIcons[index]}
                 <span className="text-sm">{nav.title}</span>
-              </Link>
+              </a>
             </li>
           ))}
       </ul>

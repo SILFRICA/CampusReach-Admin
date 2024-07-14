@@ -8,7 +8,7 @@ import Card from "./cards/Card";
 
 const HomeSection: React.FC = () => {
   return (
-    <div>
+    <div id="home">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 text-[#003431]">
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
@@ -16,8 +16,8 @@ const HomeSection: React.FC = () => {
           icon={<BuildingOfficeIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Number of Channels"
-          url="/view"
-          urlTitle="View"
+          url="#filterChannel"
+          urlTitle="All | Faculty"
         />
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
@@ -25,8 +25,8 @@ const HomeSection: React.FC = () => {
           icon={<UsersIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Campus Population"
-          url="/view"
-          urlTitle="View"
+          url="#filterPopulation"
+          urlTitle="All | Student | Others"
         />
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
@@ -34,16 +34,9 @@ const HomeSection: React.FC = () => {
           icon={<NewspaperIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Number of Posts created"
-          url="/view"
-          urlTitle="View"
+          url="#filterPosts"
+          urlTitle="All | Last 7 days | Last 30 days"
         />
-      </div>
-      <div className="absolute bottom-4 w-9/12">
-        <span className="flex items-center justify-center">
-          <span className="h-px flex-1 bg-black"></span>
-          <span className="shrink-0 px-6">We are cooking something otherworldly!</span>
-          <span className="h-px flex-1 bg-black"></span>
-        </span>
       </div>
     </div>
   );

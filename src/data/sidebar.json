@@ -2,15 +2,15 @@
    "name": [
       {
          "title": "Dashboard",
-         "url": "/dashboard"
+         "url": "#home"
       },
       {
          "title": "Admins",
-         "url": "/dashboard/manage-admins"
+         "url": "#mda"
       },
       {
          "title": "Actions",
-         "url": "/dashboard/create-channel"
+         "url": "#cta"
       }
    ]
 }
