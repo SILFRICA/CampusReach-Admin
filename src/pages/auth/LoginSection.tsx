@@ -1,39 +1,62 @@
 import React, { FormEvent, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import apiUrl from "../../data/axios";
+import axios from "axios";
 
 const LoginSection: React.FC = () => {
     const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
     const handleLoginForm = async (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (email.trim() === '' || password.trim() === '') {
-          alert('Please enter email and password');
+      event.preventDefault();
+      setError('');
+
+      if (email.trim() === '' || password.trim() === '') {
+          setError('Please enter email and password');
           return;
       }
+
       try {
-        // const response = await axios.post("/api/login", {
-        // email,
-        // password,
-        // });
-  
-        const userData = {
-          email: email,
-          password: password,
-          token: "2y73|3838idcdd9qdjw9dh393739f8eiehd9ehfdj9w3dg83dhq9deihd",
-        };
-  
-        // Authenticate the user and set the user data in the authContext
-        login(userData);
-  
-        // Redirect the user to the desired page after successful login
-        navigate("/dashboard");
+          const API_URL = apiUrl('production');
+          const response = await axios.post(`${API_URL}/api/cra/login`, {
+              email,
+              password,
+          });
+
+          if (response.status === 200) {
+              console.log(response);
+
+              // Authenticate the user and set the user data in the authContext
+              login(response.data.data);
+
+              // Redirect the user to the desired page after successful login
+              navigate("/dashboard");
+          } else {
+              setError('Login failed. Please try again.');
+          }
       } catch (error) {
-        console.error("Login error:", error);
+          if (axios.isAxiosError(error)) {
+              if (error.response) {
+                  // Server responded with a status other than 2xx
+                  setError('Invalid email or password. Please try again.');
+              } else if (error.request) {
+                  // No response was received from the server
+                  setError('Network error. Please check your connection and try again.');
+              } else {
+                  // Something else happened while setting up the request
+                  setError('An unexpected error occurred. Please try again.');
+              }
+          } else {
+              // Non-Axios error
+              setError('An unexpected error occurred. Please try again.');
+          }
+          console.error("Login error:", error);
       }
-    };
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -140,6 +163,8 @@ const LoginSection: React.FC = () => {
                   className="mt-1 w-full p-2 rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
               </div>
+
+              {error && <div className="col-span-6 text-red-600 text-xs">{error}</div>}
 
               <div className="col-span-6">
                 <p className="text-sm text-gray-500">

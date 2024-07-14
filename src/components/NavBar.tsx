@@ -1,15 +1,21 @@
-import React, { FormEvent, MouseEvent, useRef, useContext } from "react";
+import React, { MouseEvent, useRef, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
 import { truncateString } from "../helpers/TruncateString";
+import apiUrl from "../data/axios";
+import axios from "axios";
 
 interface NavBarProps {
   sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
+  
+  const navigate = useNavigate();
   const { logout, userData } = useContext(AuthContext);
   const dropDownRef = useRef<HTMLUListElement>(null);
+
   const handleFullScreenMode = () => {
     if (document.fullscreenElement) {
       document.exitFullscreen();
@@ -17,18 +23,45 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
       document.documentElement.requestFullscreen();
     }
   };
+
   const handleDropDownState = () => {
     if (dropDownRef.current) {
       dropDownRef.current.classList.toggle("hidden");
     }
   };
-  const handleLogout = (event: FormEvent) => {
-    event.preventDefault();
-    // send post request to api
-    // clear storage session data
-    logout();
-    // redirect to login
-  };
+
+  const handleLogout = async () => {
+      try {
+        const API_URL = apiUrl('production');
+        await axios.post(`${API_URL}/api/logout`, {}, {
+            headers: {
+                'Authorization': `Bearer ${userData.token}`
+            }
+        });
+
+        // Call the logout function from the context to clear user data
+        logout();
+
+        // Redirect the user to the login page after logout
+        navigate("/login");
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+                // Server responded with a status other than 2xx
+                console.error('Server error during logout:', error.response.data);
+            } else if (error.request) {
+                // No response was received from the server
+                console.error('Network error during logout:', error.message);
+            } else {
+                // Something else happened while setting up the request
+                console.error('Unexpected error during logout:', error.message);
+            }
+        } else {
+            // Non-Axios error
+            console.error('Unexpected error during logout:', error);
+        }
+    }
+  }
 
   return (
     <div className="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
@@ -133,8 +166,8 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
               </div>
             </div>
             <div className="p-2 md:block text-left">
-              <h2 className="text-sm font-semibold text-[#003431]">{truncateString(userData.email, 8)}</h2>
-              <p className="text-xs text-[#0c554d]">Administrator</p>
+              <h2 className="text-sm font-semibold text-[#003431]">{truncateString(userData.user.email, 8)}</h2>
+              <p className="text-xs text-[#0c554d]">{userData.user.user_type}</p>
             </div>
           </button>
           <ul

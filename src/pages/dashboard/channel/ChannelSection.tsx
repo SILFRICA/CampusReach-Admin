@@ -6,7 +6,7 @@ const ChannelSection: React.FC = () => {
     setActiveTab(tab);
   };
   return (
-    <section className="text-lg lg:text-xl min-h-screen">
+    <section className="text-lg lg:text-xl min-h-screen" id="cta">
       <h3 className="font-bold">Super Action</h3>
       <br />
 
@@ -30,7 +30,7 @@ const ChannelSection: React.FC = () => {
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex gap-6" aria-label="Tabs">
               <a
-                href="#"
+                href="#download-mobile-app"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "channel"
                     ? "border-teal-300 text-teal-700"
@@ -56,7 +56,7 @@ const ChannelSection: React.FC = () => {
               </a>
 
               <a
-                href="#"
+                href="#excel-sheet-4-bulk-data"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "excel"
                     ? "border-teal-300 text-teal-700"
@@ -92,8 +92,9 @@ const ChannelSection: React.FC = () => {
           </small>
         ) : (
           <div className="flex flex-col gap-3 justify-center">
-            <div className="p-2 border border-gray-300 rounded-md flex gap-2 items-center">
-              <small className="text-red-600">
+            <small className="text-yellow-600 text-xs lg:text-base">Create Bulk channels ranging from 5 above!</small>
+            <div className="w-fit p-2 border border-gray-300 rounded-md flex flex-col md:flex-row gap-2 items-center">
+              <small className="text-red-600 text-xs lg:text-base">
                 ⚠ Please use our template to fill your data.
               </small>
               <a href="/favicon.svg" type="download" className="underline">

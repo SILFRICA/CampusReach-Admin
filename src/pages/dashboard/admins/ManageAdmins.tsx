@@ -35,7 +35,7 @@ const ManageAdmins: React.FC = () => {
     setFilterSelected("all");
   };
   return (
-    <section className="text-lg lg:text-xl min-h-screen">
+    <section className="text-lg lg:text-xl min-h-full" id="mda">
       <h3 className="font-bold">View all admins</h3>
       <br />
 
@@ -154,16 +154,13 @@ const ManageAdmins: React.FC = () => {
             <thead className="text-left">
               <tr>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Name
+                  Email Address
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Date of Birth
+                  Channel
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Role
-                </th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Salary
+                  Category
                 </th>
               </tr>
             </thead>
@@ -174,16 +171,13 @@ const ManageAdmins: React.FC = () => {
                 currentAdmins.map((admin, index) => (
                     <tr key={index}>
                       <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                        {admin.name}
+                        {admin.email}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.birthdate}
+                        {admin.channel}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.occupation}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.salary}
+                        {admin.category}
                       </td>
                     </tr>
                   ))
