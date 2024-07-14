@@ -30,7 +30,7 @@ const ChannelSection: React.FC = () => {
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex gap-6" aria-label="Tabs">
               <a
-                href="#"
+                href="#download-mobile-app"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "channel"
                     ? "border-teal-300 text-teal-700"
@@ -56,7 +56,7 @@ const ChannelSection: React.FC = () => {
               </a>
 
               <a
-                href="#"
+                href="#excel-sheet-4-bulk-data"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "excel"
                     ? "border-teal-300 text-teal-700"

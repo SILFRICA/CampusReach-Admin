@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useContext} from "react";
+import { AuthContext } from "../context/AuthContext";
 import {
   UsersIcon,
   BuildingOfficeIcon,
@@ -7,12 +8,13 @@ import {
 import Card from "./cards/Card";
 
 const HomeSection: React.FC = () => {
+  const { userData } = useContext(AuthContext);
   return (
     <div id="home">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 text-[#003431]">
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
-          amount={10}
+          amount={userData.channel_managed + userData.subchannel_managed}
           icon={<BuildingOfficeIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Number of Channels"
@@ -21,7 +23,7 @@ const HomeSection: React.FC = () => {
         />
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
-          amount={10000}
+          amount={userData.user.campus_population}
           icon={<UsersIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Campus Population"
@@ -30,7 +32,7 @@ const HomeSection: React.FC = () => {
         />
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
-          amount={100}
+          amount={userData.user.amount_of_posts}
           icon={<NewspaperIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Number of Posts created"

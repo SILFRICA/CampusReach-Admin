@@ -28,14 +28,10 @@ const LoginSection: React.FC = () => {
           });
 
           if (response.status === 200) {
-              const userData = {
-                  email: email,
-                  password: password,
-                  data: response.data,
-              };
+              console.log(response);
 
               // Authenticate the user and set the user data in the authContext
-              login(userData);
+              login(response.data.data);
 
               // Redirect the user to the desired page after successful login
               navigate("/dashboard");
