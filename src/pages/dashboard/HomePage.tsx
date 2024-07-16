@@ -20,6 +20,15 @@ const HomePage: React.FC = () => {
           </p>
         </div>
 
+        <div className="mt-12 text-center">
+          <Link
+            to={"/login"}
+            className="inline-block rounded bg-teal-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-teal-700 focus:outline-none focus:ring focus:ring-yellow-400"
+          >
+            See your campus &rarr;
+          </Link>
+        </div>
+
         <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           <a
             className="block rounded-xl border border-gray-800 p-8 shadow-xl transition hover:border-pink-500/10 hover:shadow-teal-500/10"
@@ -28,7 +37,7 @@ const HomePage: React.FC = () => {
             <img src={icon1} alt="icon" />
 
             <h2 className="mt-4 text-xl font-bold text-white">
-              Digital campaigns
+              Talent supply
             </h2>
 
             <p className="mt-1 text-sm text-gray-300">
@@ -68,15 +77,6 @@ const HomePage: React.FC = () => {
               informed decisions.
             </p>
           </a>
-        </div>
-
-        <div className="mt-12 text-center">
-          <Link
-            to={"/login"}
-            className="inline-block rounded bg-teal-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-teal-700 focus:outline-none focus:ring focus:ring-yellow-400"
-          >
-            See your campus
-          </Link>
         </div>
       </div>
     </section>
