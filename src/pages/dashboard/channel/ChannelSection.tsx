@@ -126,7 +126,7 @@ const ChannelSection: React.FC = () => {
       <div className="lg:h-48 py-4 lg:py-0 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
         {activeTab === "channel" ? (
           <small className="text-red-600">
-            ⚠ Kindly use our mobile app to proceed with this action!
+            <a href="https://play.google.com/store/apps/details?id=com.mobile.silfrica">⚠ Kindly use our mobile app to proceed with this action!</a>
           </small>
         ) : (
           <div className="flex flex-col gap-3 justify-center items-center w-full">
