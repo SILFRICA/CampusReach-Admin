@@ -1,5 +1,4 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
 import { useRef } from "react";
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
