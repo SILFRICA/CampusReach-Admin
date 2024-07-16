@@ -187,7 +187,7 @@ const LoginSection: React.FC = () => {
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
-                  Don't have an account yet?
+                  Forgot your password?
                   <a
                     href="mailto:support@silfrica.com"
                     className="text-gray-700 underline"
