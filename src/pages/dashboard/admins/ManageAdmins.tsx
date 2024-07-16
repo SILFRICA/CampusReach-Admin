@@ -159,6 +159,9 @@ const ManageAdmins: React.FC = () => {
                   Email Address
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                  Channel Name
+                </th>
+                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                   Category
                 </th>
               </tr>
@@ -168,28 +171,18 @@ const ManageAdmins: React.FC = () => {
               {AdminsData.length > 0 ? (
                 currentAdmins.map((admin: any, index: number) => (
                   <tr key={index}>
-                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                    <td className="divide-y-2 divide-gray-200 bg-white text-sm">
                       {admin.email}
                     </td>
                     <table className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      <thead className="text-left">
-                        <tr>
-                          <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                            Channel
-                          </th>
-                          <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                            SubChannel
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                      <tbody className="divide-y divide-gray-200">
                         <tr>
                           {admin.channels.length > 0
                             ? admin.channels.map(
                                 (channel: any, index: number) => (
                                   <tr key={index}>
                                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                                      {channel}
+                                      {channel.name}
                                     </td>
                                   </tr>
                                 )
@@ -200,7 +193,7 @@ const ManageAdmins: React.FC = () => {
                                 (subChannel: any, index: number) => (
                                   <tr key={index}>
                                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                                      {subChannel}
+                                      {subChannel.name}
                                     </td>
                                   </tr>
                                 )
