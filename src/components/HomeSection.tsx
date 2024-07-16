@@ -10,8 +10,10 @@ import Card from "./cards/Card";
 const HomeSection: React.FC = () => {
   const { userData } = useContext(AuthContext);
   const handleAmountOfChannels = (arr1: number[], arr2: number[]): number => {
-    let total = arr1.reduce((sum, num) => sum + num, 0);
-    total += arr2.reduce((sum, num) => sum + num, 0);
+    const validArr1 = Array.isArray(arr1) ? arr1 : [];
+    const validArr2 = Array.isArray(arr2) ? arr2 : [];
+    let total = validArr1.length > 0 ? validArr1.length : 0;
+    total += validArr2.length > 0 ? validArr2.length : 0;
     return total;
   };
   
