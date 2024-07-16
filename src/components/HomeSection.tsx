@@ -9,12 +9,20 @@ import Card from "./cards/Card";
 
 const HomeSection: React.FC = () => {
   const { userData } = useContext(AuthContext);
+  const handleAmountOfChannels = (arr1: number[], arr2: number[]): number => {
+    let total = arr1.reduce((sum, num) => sum + num, 0);
+    total += arr2.reduce((sum, num) => sum + num, 0);
+    return total;
+  };
+  
+  const numberOfChannels: number = handleAmountOfChannels(userData.channel_managed, userData.subchannel_managed);
+  
   return (
     <div id="home">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 text-[#003431]">
         <Card
           className="bg-white border border-l-4 border-l-teal-600"
-          amount={userData.channel_managed + userData.subchannel_managed}
+          amount={numberOfChannels}
           icon={<BuildingOfficeIcon className="w-6 h-6" />}
           iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Number of Channels"

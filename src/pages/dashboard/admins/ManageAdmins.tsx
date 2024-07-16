@@ -163,7 +163,7 @@ const ManageAdmins: React.FC = () => {
                   Channel
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Category
+                  Sub Channel
                 </th>
               </tr>
             </thead>
@@ -177,10 +177,10 @@ const ManageAdmins: React.FC = () => {
                         {admin.email}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.channels.length > 0 ? admin.channels : '---'}
+                        {admin.channels.length > 0 ? admin.channels.join(", ") : '---'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.sub_channels.length > 0 ? admin.sub_channels : '---'}
+                        {admin.sub_channels.length > 0 ? admin.sub_channels.join(", ") : '---'}
                       </td>
                     </tr>
                   ))
