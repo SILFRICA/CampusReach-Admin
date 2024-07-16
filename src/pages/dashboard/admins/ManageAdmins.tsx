@@ -1,7 +1,6 @@
 import React, { MouseEvent, useState, useContext } from "react";
 import { AuthContext } from "../../../context/AuthContext";
 
-
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
   const AdminsData = userData.sub_admins;
@@ -160,32 +159,62 @@ const ManageAdmins: React.FC = () => {
                   Email Address
                 </th>
                 <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Channel
-                </th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Sub Channel
+                  Category
                 </th>
               </tr>
             </thead>
 
             <tbody className="divide-y divide-gray-200">
-              {AdminsData.length > 0 
-              ? 
+              {AdminsData.length > 0 ? (
                 currentAdmins.map((admin: any, index: number) => (
-                    <tr key={index}>
-                      <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                        {admin.email}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.channels.length > 0 ? admin.channels.join(", ") : '---'}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.sub_channels.length > 0 ? admin.sub_channels.join(", ") : '---'}
-                      </td>
-                    </tr>
-                  ))
-              : (
-                <h2 className="text-center text-xl text-teal-900">No data available!😥</h2>
+                  <tr key={index}>
+                    <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                      {admin.email}
+                    </td>
+                    <table className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      <thead className="text-left">
+                        <tr>
+                          <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                            Channel
+                          </th>
+                          <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+                            SubChannel
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          {admin.channels.length > 0
+                            ? admin.channels.map(
+                                (channel: any, index: number) => (
+                                  <tr key={index}>
+                                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                      {channel}
+                                    </td>
+                                  </tr>
+                                )
+                              )
+                            : "---"}
+                          {admin.sub_channels.length > 0
+                            ? admin.sub_channels.map(
+                                (subChannel: any, index: number) => (
+                                  <tr key={index}>
+                                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                      {subChannel}
+                                    </td>
+                                  </tr>
+                                )
+                              )
+                            : "---"}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </tr>
+                ))
+              ) : (
+                <h2 className="text-center text-xl text-teal-900">
+                  No data available!😥
+                </h2>
               )}
             </tbody>
           </table>
