@@ -1,12 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../../../context/AuthContext";
+import apiUrl from "../../../data/axios";
 
 const ChannelSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("excel");
+  const [file, setFile] = useState<File | null>(null);
+  const { userData } = useContext(AuthContext);
+
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab);
   };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      setFile(event.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!file) {
+      alert("Please upload an Excel sheet.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const API_URL = apiUrl("production");
+      await axios.post(`${API_URL}/api/import-channels`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Authorization": `Bearer ${userData.token}`
+        }
+      });
+
+      alert("File uploaded successfully.");
+    } catch (error) {
+      console.error("File upload error:", error);
+      alert("Failed to upload the file. Please try again.");
+    }
+  };
   return (
-    <section className="text-lg lg:text-xl min-h-screen" id="cta">
+    <section className="text-lg lg:text-xl lg:min-h-screen" id="cta">
       <h3 className="font-bold">Super Action</h3>
       <br />
 
@@ -85,31 +123,44 @@ const ChannelSection: React.FC = () => {
         </div>
       </div>
       <br />
-      <div className="h-48 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
+      <div className="lg:h-48 py-4 lg:py-0 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
         {activeTab === "channel" ? (
           <small className="text-red-600">
             ⚠ Kindly use our mobile app to proceed with this action!
           </small>
         ) : (
-          <div className="flex flex-col gap-3 justify-center">
-            <small className="text-yellow-600 text-xs lg:text-base">Create Bulk channels ranging from 5 above!</small>
-            <div className="w-fit p-2 border border-gray-300 rounded-md flex flex-col md:flex-row gap-2 items-center">
+          <div className="flex flex-col gap-3 justify-center items-center w-full">
+            <small className="text-yellow-600 text-xs lg:text-base">
+              Create Bulk channels ranging from 5 above!
+            </small>
+            <div className="w-fit p-2 border border-gray-300 rounded-md flex flex-col md:flex-row gap-2 items-center justify-center">
               <small className="text-red-600 text-xs lg:text-base">
                 ⚠ Please use our template to fill your data.
               </small>
-              <a href="/favicon.svg" type="download" className="underline">
+              <a href="/ChannelCreationTemplate.xlsx" type="download" className="underline">
                 download here!
               </a>
             </div>
-            <div className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full">
+            <form className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full" onSubmit={handleSubmit}>
               <label htmlFor="excelSheet">Upload Sheet</label>
               <input
                 type="file"
-                name="excel_sheet"
+                name="file"
                 id="excelSheet"
                 className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
+                onChange={handleFileChange}
               />
-            </div>
+              <button
+              type="submit"
+                className="group relative inline-block overflow-hidden border border-teal-600 px-3 py-2 focus:outline-none focus:ring rounded-md"
+              >
+                <span className="absolute inset-y-0 left-0 w-[2px] bg-teal-600 transition-all group-hover:w-full group-active:bg-teal-500"></span>
+
+                <span className="relative text-sm font-medium text-teal-600 transition-colors group-hover:text-white">
+                  submit
+                </span>
+              </button>
+            </form>
           </div>
         )}
       </div>

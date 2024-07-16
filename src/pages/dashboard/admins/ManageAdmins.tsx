@@ -1,7 +1,10 @@
-import React, { MouseEvent, useState } from "react";
-import AdminsData from "../../../data/admins.json";
+import React, { MouseEvent, useState, useContext } from "react";
+import { AuthContext } from "../../../context/AuthContext";
+
 
 const ManageAdmins: React.FC = () => {
+  const { userData } = useContext(AuthContext);
+  const AdminsData = userData.sub_admins;
   const [filterSelected, setFilterSelected] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of items to show per page
@@ -168,16 +171,16 @@ const ManageAdmins: React.FC = () => {
             <tbody className="divide-y divide-gray-200">
               {AdminsData.length > 0 
               ? 
-                currentAdmins.map((admin, index) => (
+                currentAdmins.map((admin: any, index: number) => (
                     <tr key={index}>
                       <td className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
                         {admin.email}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.channel}
+                        {admin.channels.length > 0 ? admin.channels : '---'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                        {admin.category}
+                        {admin.sub_channels.length > 0 ? admin.sub_channels : '---'}
                       </td>
                     </tr>
                   ))
