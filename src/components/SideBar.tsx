@@ -20,7 +20,7 @@ const SideBar = forwardRef<
   const { logout, userData } = useContext(AuthContext);
   const handleLogout = async () => {
     try {
-      const API_URL = apiUrl('local');
+      const API_URL = apiUrl('production');
       await axios.post(`${API_URL}/api/logout`, {}, {
           headers: {
               'Authorization': `Bearer ${userData.token}`

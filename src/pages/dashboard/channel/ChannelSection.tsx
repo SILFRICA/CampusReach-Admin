@@ -29,7 +29,7 @@ const ChannelSection: React.FC = () => {
     formData.append("file", file);
 
     try {
-      const API_URL = apiUrl("local");
+      const API_URL = apiUrl("production");
       await axios.post(`${API_URL}/api/import-channels`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",

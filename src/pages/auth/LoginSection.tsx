@@ -26,7 +26,7 @@ const LoginSection: React.FC = () => {
     }
 
     try {
-      const API_URL = apiUrl("local");
+      const API_URL = apiUrl("production");
       const response = await axios.post(`${API_URL}/api/cra/login`, {
         email,
         password,
