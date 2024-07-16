@@ -32,7 +32,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
 
   const handleLogout = async () => {
       try {
-        const API_URL = apiUrl('production');
+        const API_URL = apiUrl('local');
         await axios.post(`${API_URL}/api/logout`, {}, {
             headers: {
                 'Authorization': `Bearer ${userData.token}`
