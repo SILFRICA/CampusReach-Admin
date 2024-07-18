@@ -19,6 +19,13 @@ const ChannelSection: React.FC = () => {
     }
   };
 
+  const clearFileInputnState = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setFile(null);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!file) {
@@ -41,14 +48,11 @@ const ChannelSection: React.FC = () => {
 
       alert("File uploaded successfully.");
 
-      // Clear the file input field
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-      setFile(null); // Reset the file state
+      clearFileInputnState();
     } catch (error) {
       console.error("File upload error:", error);
       alert("Failed to upload the file. Please try again.");
+      clearFileInputnState();
     }
   };
   return (
