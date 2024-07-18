@@ -27,10 +27,11 @@ const ChannelSection: React.FC = () => {
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("user_id", userData.user.id);
 
     try {
       const API_URL = apiUrl("production");
-      await axios.post(`${API_URL}/api/import-channels`, formData, {
+      await axios.post(`${API_URL}/api/subchannels/bulk`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           "Authorization": `Bearer ${userData.token}`
@@ -137,11 +138,12 @@ const ChannelSection: React.FC = () => {
               <small className="text-red-600 text-xs lg:text-base">
                 ⚠ Please use our template to fill your data.
               </small>
-              <a href="/ChannelCreationTemplate.xlsx" type="download" className="underline">
+              <a href="/template.xlsx" type="download" className="underline">
                 download here!
               </a>
             </div>
             <form className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full" onSubmit={handleSubmit}>
+              <input type="hidden" name="user_id" value={userData.user.id} />
               <label htmlFor="excelSheet">Upload Sheet</label>
               <input
                 type="file"
