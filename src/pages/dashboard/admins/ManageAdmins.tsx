@@ -3,20 +3,43 @@ import { AuthContext } from "../../../context/AuthContext";
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
-  const AdminsData = userData.sub_admins;
   const [filterSelected, setFilterSelected] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5; // Number of items to show per page
 
+  // Flatten channels and sub_channels
+  const AdminsData = userData.sub_admins.map((admin: any) => ({
+    email: admin.email,
+    channels: [
+      ...admin.channels.map((channel: any) => ({
+        name: channel.name,
+        category: channel.type,
+      })),
+      ...admin.sub_channels.map((subChannel: any) => ({
+        name: subChannel.name,
+        category: subChannel.category,
+      })),
+    ],
+  }));
+
+  // Flattened data for table display
+  const flattenedData = AdminsData.flatMap((admin: any) =>
+    admin.channels.map((channel: any) => ({
+      email: admin.email,
+      name: channel.name,
+      category: channel.category,
+    }))
+  );
+
   // Calculate total number of pages
-  const totalPages = Math.ceil(AdminsData.length / itemsPerPage);
+  const totalPages = Math.ceil(flattenedData.length / itemsPerPage);
 
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   // Slice the data to display only the items for the current page
-  const currentAdmins = AdminsData.slice(startIndex, endIndex);
+  const currentAdmins = flattenedData.slice(startIndex, endIndex);
 
   // Handlers for pagination
   const nextPage = () => {
@@ -30,12 +53,15 @@ const ManageAdmins: React.FC = () => {
       setCurrentPage(currentPage - 1);
     }
   };
+
   const handleSelectedFilter = (e: MouseEvent<HTMLInputElement>) => {
     setFilterSelected(e.currentTarget.value);
   };
+
   const resetFilter = () => {
     setFilterSelected("all");
   };
+
   return (
     <section className="text-lg lg:text-xl min-h-full" id="mda">
       <h3 className="font-bold">View all admins</h3>
@@ -45,7 +71,6 @@ const ManageAdmins: React.FC = () => {
         <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
           <summary className="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition">
             <span className="text-sm font-medium"> Filter </span>
-
             <span className="transition group-open:-rotate-180">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -168,46 +193,29 @@ const ManageAdmins: React.FC = () => {
             </thead>
 
             <tbody className="divide-y divide-gray-200">
-              {AdminsData.length > 0 ? (
+              {currentAdmins.length > 0 ? (
                 currentAdmins.map((admin: any, index: number) => (
                   <tr key={index}>
-                    <td className="divide-y-2 divide-gray-200 bg-white text-sm">
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       {admin.email}
                     </td>
-                    <table className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      <tbody className="divide-y divide-gray-200">
-                        <tr>
-                          {admin.channels.length > 0
-                            ? admin.channels.map(
-                                (channel: any, index: number) => (
-                                  <tr key={index}>
-                                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                                      {channel.name}
-                                    </td>
-                                  </tr>
-                                )
-                              )
-                            : "---"}
-                          {admin.sub_channels.length > 0
-                            ? admin.sub_channels.map(
-                                (subChannel: any, index: number) => (
-                                  <tr key={index}>
-                                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                                      {subChannel.name}
-                                    </td>
-                                  </tr>
-                                )
-                              )
-                            : "---"}
-                        </tr>
-                      </tbody>
-                    </table>
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      {admin.name}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                      {admin.category}
+                    </td>
                   </tr>
                 ))
               ) : (
-                <h2 className="text-center text-xl text-teal-900">
-                  No data available!😥
-                </h2>
+                <tr>
+                  <td
+                    className="text-center text-xl text-teal-900"
+                    colSpan={3}
+                  >
+                    No data available!😥
+                  </td>
+                </tr>
               )}
             </tbody>
           </table>
@@ -233,7 +241,7 @@ const ManageAdmins: React.FC = () => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
                   clipRule="evenodd"
                 />
               </svg>
@@ -263,7 +271,7 @@ const ManageAdmins: React.FC = () => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z"
                   clipRule="evenodd"
                 />
               </svg>
