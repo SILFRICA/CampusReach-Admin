@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 import axios from "axios";
 import { AuthContext } from "../../../context/AuthContext";
 import apiUrl from "../../../data/axios";
@@ -7,6 +7,7 @@ const ChannelSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("excel");
   const [file, setFile] = useState<File | null>(null);
   const { userData } = useContext(AuthContext);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleActiveTab = (tab: string) => {
     setActiveTab(tab);
@@ -34,11 +35,17 @@ const ChannelSection: React.FC = () => {
       await axios.post(`${API_URL}/api/subchannels/bulk`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          "Authorization": `Bearer ${userData.token}`
-        }
+          Authorization: `Bearer ${userData.token}`,
+        },
       });
 
       alert("File uploaded successfully.");
+
+      // Clear the file input field
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      setFile(null); // Reset the file state
     } catch (error) {
       console.error("File upload error:", error);
       alert("Failed to upload the file. Please try again.");
@@ -127,7 +134,9 @@ const ChannelSection: React.FC = () => {
       <div className="lg:h-48 py-4 lg:py-0 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
         {activeTab === "channel" ? (
           <small className="text-red-600">
-            <a href="https://play.google.com/store/apps/details?id=com.mobile.silfrica">⚠ Kindly use our mobile app to proceed with this action!</a>
+            <a href="https://play.google.com/store/apps/details?id=com.mobile.silfrica">
+              ⚠ Kindly use our mobile app to proceed with this action!
+            </a>
           </small>
         ) : (
           <div className="flex flex-col gap-3 justify-center items-center w-full">
@@ -142,18 +151,22 @@ const ChannelSection: React.FC = () => {
                 download here!
               </a>
             </div>
-            <form className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full" onSubmit={handleSubmit}>
+            <form
+              className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full"
+              onSubmit={handleSubmit}
+            >
               <input type="hidden" name="user_id" value={userData.user.id} />
               <label htmlFor="excelSheet">Upload Sheet</label>
               <input
                 type="file"
                 name="file"
                 id="excelSheet"
+                ref={fileInputRef}
                 className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
                 onChange={handleFileChange}
               />
               <button
-              type="submit"
+                type="submit"
                 className="group relative inline-block overflow-hidden border border-teal-600 px-3 py-2 focus:outline-none focus:ring rounded-md"
               >
                 <span className="absolute inset-y-0 left-0 w-[2px] bg-teal-600 transition-all group-hover:w-full group-active:bg-teal-500"></span>
