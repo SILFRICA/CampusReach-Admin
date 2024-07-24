@@ -6,8 +6,7 @@ interface CardProps {
   title: string;
   icon: ReactElement | null;
   iconParentClass: string;
-  url: string;
-  urlTitle: string;
+  children: ReactElement | null;
 }
 
 const Card: React.FC<CardProps> = ({
@@ -15,9 +14,8 @@ const Card: React.FC<CardProps> = ({
   amount,
   title,
   icon,
-  url,
   iconParentClass,
-  urlTitle,
+  children
 }) => {
   return (
     <div className={`${className} rounded-md p-6 shadow-md shadow-black/5`}>
@@ -31,14 +29,7 @@ const Card: React.FC<CardProps> = ({
         </div>
       </div>
 
-      {urlTitle && (
-        <a
-          href={url}
-          className="text-[#028374] font-medium text-sm hover:text-[#0c554d]"
-        >
-          {urlTitle}
-        </a>
-      )}
+      {children}
     </div>
   );
 };
