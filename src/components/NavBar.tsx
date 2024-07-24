@@ -1,67 +1,79 @@
-import React, { MouseEvent, useRef, useContext } from "react";
+import React, {
+  MouseEvent,
+  useRef,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { Bars3BottomLeftIcon } from "@heroicons/react/20/solid";
 import { truncateString } from "../helpers/TruncateString";
 import apiUrl from "../data/axios";
 import axios from "axios";
+import { handleAxiosError } from "../utils/axiosError";
+import { handleFullScreenMode } from "../utils/screen";
 
 interface NavBarProps {
   sidebarToggle: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
-  
   const navigate = useNavigate();
-  const { logout, userData } = useContext(AuthContext);
+  const { logout, refresh, userData } = useContext(AuthContext);
+  const API_URL = apiUrl("production");
+  const [isLoading, setIsLoading] = useState<string>("");
   const dropDownRef = useRef<HTMLUListElement>(null);
 
-  const handleFullScreenMode = () => {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-    } else {
-      document.documentElement.requestFullscreen();
-    }
-  };
-
+  // Function to toggle dropdown visibility
   const handleDropDownState = () => {
     if (dropDownRef.current) {
       dropDownRef.current.classList.toggle("hidden");
     }
   };
 
-  const handleLogout = async () => {
-      try {
-        const API_URL = apiUrl('production');
-        await axios.post(`${API_URL}/api/logout`, {}, {
-            headers: {
-                'Authorization': `Bearer ${userData.token}`
-            }
-        });
+  // Function to refresh data
+  const handleDataRefresh = async () => {
+    setIsLoading("refreshing...");
+    try {
+      const response = await axios.post(
+        `${API_URL}/api/admin/refresh/data`,
+        { user_id: userData.user.id },
+        { headers: { Authorization: `Bearer ${userData.token}` } }
+      );
 
-        // Call the logout function from the context to clear user data
-        logout();
-
-        // Redirect the user to the login page after logout
-        navigate("/login");
+      if (response.status === 200) {
+        refresh(response.data.data);
+      } else {
+        alert("Refresh failed. Please try again later!");
+      }
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-                // Server responded with a status other than 2xx
-                console.error('Server error during logout:', error.response.data);
-            } else if (error.request) {
-                // No response was received from the server
-                console.error('Network error during logout:', error.message);
-            } else {
-                // Something else happened while setting up the request
-                console.error('Unexpected error during logout:', error.message);
-            }
-        } else {
-            // Non-Axios error
-            console.error('Unexpected error during logout:', error);
-        }
+      handleAxiosError(error);
+    } finally {
+      setIsLoading("");
     }
-  }
+  };
+
+  const handleLogout = async () => {
+    setIsLoading("signing out...");
+    try {
+      await axios.post(
+        `${API_URL}/api/logout`,
+        {},
+        { headers: { Authorization: `Bearer ${userData.token}` } }
+      );
+
+      setTimeout(() => {
+        logout();
+        navigate("/login");
+      }, 1000);
+    } catch (error) {
+      handleAxiosError(error);
+    }
+  };
+
+  // Effect to refresh data on userData change
+  useEffect(() => {}, [userData]);
 
   return (
     <div className="py-2 px-6 bg-white flex items-center shadow-md shadow-black/5 sticky top-0 left-0 z-30">
@@ -74,70 +86,38 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
       </button>
 
       <ul className="ml-auto flex items-center">
+        {isLoading && (
+          <span
+            className={`${
+              isLoading === "refreshing..." ? "bg-teal-600" : "bg-red-600"
+            } text-white rounded-md px-2 animate-pulse`}
+          >
+            {isLoading}
+          </span>
+        )}
         <li className="dropdown">
           <button
             type="button"
-            className="dropdown-toggle text-[#003431] mr-4 w-8 h-8 rounded flex items-center justify-center  hover:text-[#00a490]"
+            className={`text-[#003431] mr-4 w-8 h-8 rounded flex items-center justify-center hover:text-[#00a490] ${
+              isLoading && "animate-spin"
+            }`}
+            onClick={handleDataRefresh}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              className="hover:bg-[#00a490] rounded-full"
+              fill="none"
               viewBox="0 0 24 24"
-              style={{ fill: "#003431", transform: "", msFilter: "" }}
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
             >
-              <path d="M19 13.586V10c0-3.217-2.185-5.927-5.145-6.742C13.562 2.52 12.846 2 12 2s-1.562.52-1.855 1.258C7.185 4.074 5 6.783 5 10v3.586l-1.707 1.707A.996.996 0 0 0 3 16v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2a.996.996 0 0 0-.293-.707L19 13.586zM19 17H5v-.586l1.707-1.707A.996.996 0 0 0 7 14v-4c0-2.757 2.243-5 5-5s5 2.243 5 5v4c0 .266.105.52.293.707L19 16.414V17zm-7 5a2.98 2.98 0 0 0 2.818-2H9.182A2.98 2.98 0 0 0 12 22z"></path>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
+              />
             </svg>
           </button>
-          <div className="dropdown-menu shadow-md shadow-black/5 z-30 hidden max-w-xs w-full bg-white rounded-md border border-gray-100">
-            <div className="flex items-center px-4 pt-4 border-b border-b-gray-100 notification-tab">
-              <button
-                type="button"
-                data-tab="notification"
-                data-tab-page="notifications"
-                className="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1 active"
-              >
-                Notifications
-              </button>
-              <button
-                type="button"
-                data-tab="notification"
-                data-tab-page="messages"
-                className="text-gray-400 font-medium text-[13px] hover:text-gray-600 border-b-2 border-b-transparent mr-4 pb-1"
-              >
-                Messages
-              </button>
-            </div>
-            <div className="my-2">
-              <ul
-                className="max-h-64 overflow-y-auto"
-                data-tab-for="notification"
-                data-page="notifications"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="py-2 px-4 flex items-center hover:bg-gray-50 group"
-                  >
-                    <img
-                      src="https://placehold.co/32x32"
-                      alt=""
-                      className="w-8 h-8 rounded block object-cover align-middle"
-                    />
-                    <div className="ml-2">
-                      <div className="text-[13px] text-gray-600 font-medium truncate group-hover:text-blue-500">
-                        New order
-                      </div>
-                      <div className="text-[11px] text-gray-400">
-                        from a user
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
         </li>
         <button id="fullscreen-button" onClick={handleFullScreenMode}>
           <svg
@@ -166,8 +146,12 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
               </div>
             </div>
             <div className="p-2 md:block text-left">
-              <h2 className="text-sm font-semibold text-[#003431]">{truncateString(userData.user.email, 8)}</h2>
-              <p className="text-xs text-[#0c554d]">{userData.user.user_type}</p>
+              <h2 className="text-sm font-semibold text-[#003431]">
+                {truncateString(userData.user.email, 8)}
+              </h2>
+              <p className="text-xs text-[#0c554d]">
+                {userData.user.user_type}
+              </p>
             </div>
           </button>
           <ul
@@ -191,14 +175,13 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
               </a>
             </li>
             <li>
-              <form method="POST" action="" onSubmit={handleLogout}>
-                <button
-                  role="menuitem"
-                  className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
-                >
-                  Log Out
-                </button>
-              </form>
+              <button
+                role="menuitem"
+                className="flex items-center text-[13px] py-1.5 px-4 text-gray-600 hover:text-[#f84525] hover:bg-gray-50 cursor-pointer"
+                onClick={handleLogout}
+              >
+                Log Out
+              </button>
             </li>
           </ul>
         </li>
