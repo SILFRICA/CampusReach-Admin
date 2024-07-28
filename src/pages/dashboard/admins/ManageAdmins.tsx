@@ -81,7 +81,7 @@ const ManageAdmins: React.FC = () => {
       <h3 className="font-bold">View all admins</h3>
       <br />
 
-      <div className="flex gap-3 items-center h-12 border">
+      <div className="flex gap-3 items-center h-12">
         {/* Add the search field here */}
         <input
           type="text"
