@@ -1,45 +1,57 @@
-import React, { MouseEvent, useState, useContext } from "react";
+import React, { useState, useContext, ChangeEvent } from "react";
 import { AuthContext } from "../../../context/AuthContext";
+import { ChannelTable, AdminData, AdminProps } from "./AdminsChannelsTypes";
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
-  const [filterSelected, setFilterSelected] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const itemsPerPage = 5; // Number of items to show per page
 
   // Flatten channels and sub_channels
-  const AdminsData = userData.sub_admins.map((admin: any) => ({
-    email: admin.email,
-    channels: [
-      ...admin.channels.map((channel: any) => ({
-        name: channel.name,
-        category: channel.type,
-      })),
-      ...admin.sub_channels.map((subChannel: any) => ({
-        name: subChannel.name,
-        category: subChannel.category,
-      })),
-    ],
-  }));
+  const AdminsData: ChannelTable[] = userData.sub_admins.map(
+    (admin: AdminProps) => ({
+      email: admin.email,
+      channels: [
+        ...admin.channels.map((channel) => ({
+          name: channel.name,
+          category: channel.type,
+        })),
+        ...admin.sub_channels.map((subChannel) => ({
+          name: subChannel.name,
+          category: subChannel.category,
+        })),
+      ],
+    })
+  );
 
   // Flattened data for table display
-  const flattenedData = AdminsData.flatMap((admin: any) =>
-    admin.channels.map((channel: any) => ({
+  const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
+    admin.channels.map((channel: AdminData) => ({
       email: admin.email,
       name: channel.name,
       category: channel.category,
     }))
   );
 
+  // Filter data based on the search query and selected category
+  const filteredData = flattenedData.filter(
+    (admin) =>
+      (admin.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        admin.name.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (selectedCategory ? admin.category === selectedCategory : true)
+  );
+
   // Calculate total number of pages
-  const totalPages = Math.ceil(flattenedData.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   // Calculate the index range for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
   // Slice the data to display only the items for the current page
-  const currentAdmins = flattenedData.slice(startIndex, endIndex);
+  const currentAdmins = filteredData.slice(startIndex, endIndex);
 
   // Handlers for pagination
   const nextPage = () => {
@@ -54,12 +66,14 @@ const ManageAdmins: React.FC = () => {
     }
   };
 
-  const handleSelectedFilter = (e: MouseEvent<HTMLInputElement>) => {
-    setFilterSelected(e.currentTarget.value);
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+    setCurrentPage(1); // Reset to the first page whenever the search query changes
   };
 
-  const resetFilter = () => {
-    setFilterSelected("all");
+  const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(event.target.value);
+    setCurrentPage(1); // Reset to the first page whenever the category changes
   };
 
   return (
@@ -67,110 +81,29 @@ const ManageAdmins: React.FC = () => {
       <h3 className="font-bold">View all admins</h3>
       <br />
 
-      <div className="space-y-2">
-        <details className="overflow-hidden rounded border border-gray-300 [&_summary::-webkit-details-marker]:hidden">
-          <summary className="flex cursor-pointer items-center justify-between gap-2 bg-white p-4 text-gray-900 transition">
-            <span className="text-sm font-medium"> Filter </span>
-            <span className="transition group-open:-rotate-180">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="h-4 w-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                />
-              </svg>
-            </span>
-          </summary>
-
-          <div className="border-t border-gray-200 bg-white">
-            <header className="flex items-center justify-between p-4">
-              <span className="text-sm text-gray-700">
-                {" "}
-                {filterSelected} Selected{" "}
-              </span>
-
-              <button
-                type="button"
-                className="text-sm text-gray-900 underline underline-offset-4"
-                onClick={() => resetFilter()}
-              >
-                Reset
-              </button>
-            </header>
-
-            <ul className="space-y-1 border-t border-gray-200 p-4">
-              <li>
-                <label
-                  htmlFor="FilterForEmail"
-                  className="inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    id="FilterForEmail"
-                    name="filter"
-                    value="email"
-                    onClick={(e) => handleSelectedFilter(e)}
-                    className="size-5 rounded border-gray-300"
-                  />
-
-                  <span className="text-sm font-medium text-gray-700">
-                    {" "}
-                    email address{" "}
-                  </span>
-                </label>
-              </li>
-
-              <li>
-                <label
-                  htmlFor="FilterForChannel"
-                  className="inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    id="FilterForChannel"
-                    name="filter"
-                    value="channel"
-                    onClick={(e) => handleSelectedFilter(e)}
-                    className="size-5 rounded border-gray-300"
-                  />
-
-                  <span className="text-sm font-medium text-gray-700">
-                    {" "}
-                    channel{" "}
-                  </span>
-                </label>
-              </li>
-
-              <li>
-                <label
-                  htmlFor="FilterForCategory"
-                  className="inline-flex items-center gap-2 cursor-pointer"
-                >
-                  <input
-                    type="radio"
-                    id="FilterForCategory"
-                    name="filter"
-                    value="category"
-                    onClick={(e) => handleSelectedFilter(e)}
-                    className="size-5 rounded border-gray-300"
-                  />
-
-                  <span className="text-sm font-medium text-gray-700">
-                    {" "}
-                    category{" "}
-                  </span>
-                </label>
-              </li>
-            </ul>
-          </div>
-        </details>
+      <div className="flex gap-3 items-center h-12 border">
+        {/* Add the search field here */}
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="🔍 Search by email or channel name"
+          className="w-2/3 h-full px-4 py-2 border border-gray-300 focus-within:outline-teal-500 rounded-lg"
+        />
+      {/* filter based field here */}
+      <select
+        value={selectedCategory ?? ""}
+        onChange={handleCategoryChange}
+        className="w-1/3 h-full px-4 py-2 border border-gray-300 focus-within:outline-teal-500 rounded-lg"
+      >
+        <option value="">All Categories</option>
+        <option value="Administration">Administration</option>
+        <option value="Faculty">Faculty</option>
+        <option value="Department">Department</option>
+        <option value="School Official">School Official</option>
+        <option value="Association">Association</option>
+        <option value="School Partner">School Partner</option>
+      </select>
       </div>
 
       <br />
@@ -194,7 +127,7 @@ const ManageAdmins: React.FC = () => {
 
             <tbody className="divide-y divide-gray-200">
               {currentAdmins.length > 0 ? (
-                currentAdmins.map((admin: any, index: number) => (
+                currentAdmins.map((admin, index: number) => (
                   <tr key={index}>
                     <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                       {admin.email}
@@ -209,10 +142,7 @@ const ManageAdmins: React.FC = () => {
                 ))
               ) : (
                 <tr>
-                  <td
-                    className="text-center text-xl text-teal-900"
-                    colSpan={3}
-                  >
+                  <td className="text-center text-xl text-teal-900" colSpan={3}>
                     No data available!😥
                   </td>
                 </tr>
@@ -241,7 +171,7 @@ const ManageAdmins: React.FC = () => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 01-1.414 1.414l-4-4a1 1 010-1.414l4-4a1 1 011.414 0z"
                   clipRule="evenodd"
                 />
               </svg>
@@ -271,7 +201,7 @@ const ManageAdmins: React.FC = () => {
               >
                 <path
                   fillRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z"
+                  d="M7.293 14.707a1 1 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z"
                   clipRule="evenodd"
                 />
               </svg>
