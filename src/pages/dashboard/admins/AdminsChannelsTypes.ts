@@ -1,14 +1,17 @@
 export interface AdminData {
-  email: string;
-  name: string;
-  category: string;
-  channel_id: number;
-  sub_channel_id: number;
+    id: number;
+    email: string;
+    name: string;
+    category: string;
+    channel_id: number;
+    sub_channel_id: number;
+    suspended_admins: null|number[];
 }
 
 export interface ChannelTable {
-  email: string;
-  channels: Channels[];
+    admin_id: number;
+    email: string;
+    channels: Channels[];
 }
 
 export interface Channel {
@@ -35,6 +38,7 @@ export interface Channels {
     sub_channel_id: number;
     name: string;
     category: string;
+    suspended_admins: null|number[];
 }
 
 export interface SubChannel {
