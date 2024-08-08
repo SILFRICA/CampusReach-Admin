@@ -1,12 +1,14 @@
 import React, { useState, useContext, ChangeEvent } from "react";
 import { AuthContext } from "../../../context/AuthContext";
-import { ChannelTable, AdminData, AdminProps } from "./AdminsChannelsTypes";
+import { ChannelTable, AdminData, AdminProps, PendingAdmin, Channel, SubChannel, Channels } from "./AdminsChannelsTypes";
+import AdminTable from "../../../components/tables/AdminTable";
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const tableHeadings: string[] = ["Email Address", "Channel Name", "Category", "Actions"];
   const itemsPerPage = 5; // Number of items to show per page
 
   // Flatten channels and sub_channels
@@ -14,24 +16,44 @@ const ManageAdmins: React.FC = () => {
     (admin: AdminProps) => ({
       email: admin.email,
       channels: [
-        ...admin.channels.map((channel) => ({
-          name: channel.name,
-          category: channel.type,
+        ...admin.channels.map((channel: Channel) => ({
+            channel_id: channel.id,
+            name: channel.name,
+            category: channel.type,
         })),
-        ...admin.sub_channels.map((subChannel) => ({
-          name: subChannel.name,
-          category: subChannel.category,
+        ...admin.sub_channels.map((subChannel: SubChannel) => ({
+            sub_channel_id: subChannel.id,
+            name: subChannel.name,
+            category: subChannel.category,
         })),
       ],
     })
   );
 
+  // Add pending admins to the flattened data
+  const pendingAdmins: PendingAdmin[] = userData.pending_admins;
+
+  const isPendingAdmin = (c_id: number|null, sc_id:number|null): boolean => {
+    let pendingExist = false;
+    pendingAdmins.forEach((pending) => {
+        if(pending.sub_channel_id == sc_id && pending.email !== null && pending.channel_id !== c_id) {
+            pendingExist = true;
+            return pendingExist;
+        }
+    })
+
+    return pendingExist;
+  }
+
+
   // Flattened data for table display
   const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
-    admin.channels.map((channel: AdminData) => ({
-      email: admin.email,
-      name: channel.name,
-      category: channel.category,
+    admin.channels.map((channel: Channels) => ({
+        channel_id: channel.channel_id,
+        sub_channel_id: channel.sub_channel_id,
+        email: admin.email,
+        name: channel.name,
+        category: channel.category,
     }))
   );
 
@@ -76,6 +98,11 @@ const ManageAdmins: React.FC = () => {
     setCurrentPage(1); // Reset to the first page whenever the category changes
   };
 
+  const resendInvite = (email: string, channelId: number | null, subChannelId: number | null) => {
+    // Resend invite logic
+    console.log(`Resending invite to ${email} for channel ${channelId} and sub-channel ${subChannelId}`);
+  };
+
   return (
     <section className="text-lg lg:text-xl min-h-full" id="mda">
       <h3 className="font-bold">View all admins</h3>
@@ -110,45 +137,48 @@ const ManageAdmins: React.FC = () => {
 
       <div className="rounded-lg border border-gray-200">
         <div className="overflow-x-auto rounded-t-lg">
-          <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
-            <thead className="text-left">
-              <tr>
-                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Email Address
-                </th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Channel Name
-                </th>
-                <th className="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-                  Category
-                </th>
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-200">
+        <AdminTable headers={tableHeadings}>
+            <>
               {currentAdmins.length > 0 ? (
-                currentAdmins.map((admin, index: number) => (
-                  <tr key={index}>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {admin.email}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {admin.name}
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                      {admin.category}
-                    </td>
-                  </tr>
-                ))
+                currentAdmins.map((admin, index: number) => {
+                  // Determine if this admin is a pending admin
+                    const isPending = isPendingAdmin(admin.channel_id, admin.sub_channel_id);
+
+                    return (
+                        <tr key={index}>
+                            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                {admin.email}
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                {admin.name}
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                {admin.category}
+                            </td>
+                            <td className="whitespace-nowrap px-4 py-2 text-gray-700">
+                                {isPending ? (
+                                <button
+                                    onClick={() => resendInvite(admin.email, admin.channel_id, admin.sub_channel_id)}
+                                    className="p-1 rounded-md bg-orange-600 text-white hover:bg-gray-100 hover:text-orange-600 transition-colors"
+                                >
+                                    Resend Invite
+                                </button>
+                                ) : (
+                                "-"
+                                )}
+                            </td>
+                        </tr>
+                    );
+                })
               ) : (
                 <tr>
-                  <td className="text-center text-xl text-teal-900" colSpan={3}>
+                  <td className="text-center text-xl text-teal-900" colSpan={4}>
                     No data available!😥
                   </td>
                 </tr>
               )}
-            </tbody>
-          </table>
+            </>
+          </AdminTable>
         </div>
 
         <div className="rounded-b-lg border-t border-gray-200 px-4 py-2">
