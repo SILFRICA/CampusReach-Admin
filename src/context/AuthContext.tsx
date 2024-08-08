@@ -19,7 +19,7 @@ interface AuthContextProps {
   login: (userData: UserDataProps) => void;
   refresh: (newData: UserDataProps) => void;
   logout: () => void;
-  userData: object;
+  userData: any;
 }
 
 interface AuthProviderProps {
