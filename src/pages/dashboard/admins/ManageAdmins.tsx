@@ -14,19 +14,21 @@ const ManageAdmins: React.FC = () => {
   // Flatten channels and sub_channels
   const AdminsData: ChannelTable[] = userData.sub_admins.map(
     (admin: AdminProps) => ({
-      email: admin.email,
-      channels: [
-        ...admin.channels.map((channel: Channel) => ({
-            channel_id: channel.id,
-            name: channel.name,
-            category: channel.type,
-        })),
-        ...admin.sub_channels.map((subChannel: SubChannel) => ({
-            sub_channel_id: subChannel.id,
-            name: subChannel.name,
-            category: subChannel.category,
-        })),
-      ],
+        admin_id: admin.id,
+        email: admin.email,
+        channels: [
+            ...admin.channels.map((channel: Channel) => ({
+                channel_id: channel.id,
+                name: channel.name,
+                category: channel.type,
+                suspended_admins: channel.suspended_admins
+            })),
+            ...admin.sub_channels.map((subChannel: SubChannel) => ({
+                sub_channel_id: subChannel.id,
+                name: subChannel.name,
+                category: subChannel.category,
+            })),
+        ],
     })
   );
 
@@ -54,6 +56,8 @@ const ManageAdmins: React.FC = () => {
         email: admin.email,
         name: channel.name,
         category: channel.category,
+        suspended_admins: channel.suspended_admins,
+        id: admin.admin_id
     }))
   );
 
@@ -103,6 +107,16 @@ const ManageAdmins: React.FC = () => {
     console.log(`Resending invite to ${email} for channel ${channelId} and sub-channel ${subChannelId}`);
   };
 
+  const handleSuspendAdmin = (adminEmail: string) => {
+    console.log(`Suspending admin: ${adminEmail}`);
+    // Implement the suspend logic here
+  };
+
+  const handleUnsuspendAdmin = (adminEmail: string) => {
+    console.log(`Unsuspending admin: ${adminEmail}`);
+    // Implement the unsuspend logic here
+  };
+
   return (
     <section className="text-lg lg:text-xl min-h-full" id="mda">
       <h3 className="font-bold">View all admins</h3>
@@ -143,6 +157,8 @@ const ManageAdmins: React.FC = () => {
                 currentAdmins.map((admin, index: number) => {
                   // Determine if this admin is a pending admin
                     const isPending = isPendingAdmin(admin.channel_id, admin.sub_channel_id);
+                    const isCurrentUser = admin.email === userData.user.email;
+                    const isSuspended = admin.suspended_admins?.includes(admin.id) ?? false;
 
                     return (
                         <tr key={index}>
@@ -156,16 +172,36 @@ const ManageAdmins: React.FC = () => {
                                 {admin.category}
                             </td>
                             <td className="whitespace-nowrap px-4 py-2 text-gray-700">
-                                {isPending ? (
+                            {isPending ? (
                                 <button
-                                    onClick={() => resendInvite(admin.email, admin.channel_id, admin.sub_channel_id)}
-                                    className="p-1 rounded-md bg-orange-600 text-white hover:bg-gray-100 hover:text-orange-600 transition-colors"
+                                onClick={() =>
+                                    resendInvite(admin.email, admin.channel_id, admin.sub_channel_id)
+                                }
+                                className="p-1 rounded-md bg-orange-600 text-white hover:bg-gray-100 hover:text-orange-600 transition-colors"
                                 >
-                                    Resend Invite
+                                Resend Invite
                                 </button>
-                                ) : (
+                            ) : isCurrentUser ? (
                                 "-"
-                                )}
+                            ) : (
+                                <>
+                                <button
+                                    onClick={() => handleSuspendAdmin(admin.email)}
+                                    disabled={isSuspended}
+                                    className={`p-1 rounded-md ${isSuspended ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-600 text-white hover:bg-gray-100 hover:text-red-600 transition-colors'}`}
+                                >
+                                    Suspend
+                                </button>
+                                <span className="mr-1"/>
+                                <button
+                                    onClick={() => handleUnsuspendAdmin(admin.email)}
+                                    disabled={!isSuspended}
+                                    className={`p-1 rounded-md ${!isSuspended ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 text-white hover:bg-gray-100 hover:text-green-600 transition-colors ml-2'}`}
+                                >
+                                    Unsuspend
+                                </button>
+                                </>
+                            )}
                             </td>
                         </tr>
                     );
