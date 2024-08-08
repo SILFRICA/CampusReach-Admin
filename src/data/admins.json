@@ -1,1 +1,350 @@
-[]
+{
+    "sub_admins": [
+        {
+            "id": 1,
+            "firstname": "Ian",
+            "lastname": "Reward",
+            "email": "hisroyaltyreward@gmail.com",
+            "channels": [
+                {
+                    "id": 1,
+                    "name": "MOUAU",
+                    "profileImage": "https://images.silfrica.com/profile_imgs/1721303509-HgNEc7W.jpg",
+                    "description": "Official communication channel for the whole university managed by the Chief Public Relations Officer",
+                    "type": "administration",
+                    "institution_id": 1,
+                    "is_primary": true,
+                    "rating": 0,
+                    "subscribers": 5,
+                    "super_admin_id": 1,
+                    "sub_admins": [
+                        1
+                    ],
+                    "sub_channels": [
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9
+                    ],
+                    "channelWebsite": "https://mouau.edu.ng/",
+                    "suspended_admins": null,
+                    "pending_admins": null,
+                    "removed_admins": null,
+                    "institution": {
+                        "Institution Name": "Michael Okpara University of Agriculture"
+                    }
+                }
+            ],
+            "sub_channels": [
+                {
+                    "id": 4,
+                    "name": "Faculty of Wealth Sciences",
+                    "profileImage": null,
+                    "description": "Official channel for health students",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Faculty",
+                    "targetAudience": "Student",
+                    "subscribers": 0,
+                    "admin_id": 1,
+                    "admin": {
+                        "id": 1,
+                        "firstname": "Ian",
+                        "lastname": "Reward",
+                        "email": "hisroyaltyreward@gmail.com",
+                        "user_type": "non Student",
+                        "username": "ianreward",
+                        "user_image": null,
+                        "primary_institution_id": 1,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9
+                        ],
+                        "created_at": "2024-07-18T08:35:48.000000Z",
+                        "updated_at": "2024-07-28T11:02:00.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                },
+                {
+                    "id": 5,
+                    "name": "Department Of Robotics Science",
+                    "profileImage": null,
+                    "description": "Official communication channel for computer science students and staff",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Department",
+                    "targetAudience": "Student",
+                    "subscribers": 0,
+                    "admin_id": 1,
+                    "admin": {
+                        "id": 1,
+                        "firstname": "Ian",
+                        "lastname": "Reward",
+                        "email": "hisroyaltyreward@gmail.com",
+                        "user_type": "non Student",
+                        "username": "ianreward",
+                        "user_image": null,
+                        "primary_institution_id": 1,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9
+                        ],
+                        "created_at": "2024-07-18T08:35:48.000000Z",
+                        "updated_at": "2024-07-28T11:02:00.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                },
+                {
+                    "id": 8,
+                    "name": "University Security",
+                    "profileImage": null,
+                    "description": "The university secuirty channel",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Department",
+                    "targetAudience": "Host community",
+                    "subscribers": 0,
+                    "admin_id": 1,
+                    "admin": {
+                        "id": 1,
+                        "firstname": "Ian",
+                        "lastname": "Reward",
+                        "email": "hisroyaltyreward@gmail.com",
+                        "user_type": "non Student",
+                        "username": "ianreward",
+                        "user_image": null,
+                        "primary_institution_id": 1,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9
+                        ],
+                        "created_at": "2024-07-18T08:35:48.000000Z",
+                        "updated_at": "2024-07-28T11:02:00.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                },
+                {
+                    "id": 9,
+                    "name": "Office of the Registrar",
+                    "profileImage": null,
+                    "description": "This is the official communication channel of the Vice Chancellor",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Department",
+                    "targetAudience": "Student",
+                    "subscribers": 0,
+                    "admin_id": 1,
+                    "admin": {
+                        "id": 1,
+                        "firstname": "Ian",
+                        "lastname": "Reward",
+                        "email": "hisroyaltyreward@gmail.com",
+                        "user_type": "non Student",
+                        "username": "ianreward",
+                        "user_image": null,
+                        "primary_institution_id": 1,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9
+                        ],
+                        "created_at": "2024-07-18T08:35:48.000000Z",
+                        "updated_at": "2024-07-28T11:02:00.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "firstname": "Perfection",
+            "lastname": "Reward",
+            "email": "rewardperfection@gmail.com",
+            "channels": [
+                {
+                    "id": 4,
+                    "name": "PRO ABSU",
+                    "profileImage": "https://images.silfrica.com/profile_imgs/",
+                    "description": "This is the official communication channel for the Public Relations Unit, Abia State University.",
+                    "type": "Administration",
+                    "institution_id": 3,
+                    "is_primary": true,
+                    "rating": 0,
+                    "subscribers": 0,
+                    "super_admin_id": 3,
+                    "sub_admins": null,
+                    "sub_channels": null,
+                    "channelWebsite": null,
+                    "suspended_admins": null,
+                    "pending_admins": null,
+                    "removed_admins": null,
+                    "institution": {
+                        "Institution Name": "Abia State University"
+                    }
+                },
+                {
+                    "id": 5,
+                    "name": "PRO UNN",
+                    "profileImage": "https://images.silfrica.com/profile_imgs/",
+                    "description": "This is the official information channel of the public relations unit of the University.",
+                    "type": "Administration",
+                    "institution_id": 4,
+                    "is_primary": true,
+                    "rating": 0,
+                    "subscribers": 0,
+                    "super_admin_id": 3,
+                    "sub_admins": [
+                        3
+                    ],
+                    "sub_channels": [
+                        10,
+                        11,
+                        12
+                    ],
+                    "channelWebsite": null,
+                    "suspended_admins": null,
+                    "pending_admins": null,
+                    "removed_admins": null,
+                    "institution": {
+                        "Institution Name": "University of Nigeria, Nsukka"
+                    }
+                }
+            ],
+            "sub_channels": [
+                {
+                    "id": 7,
+                    "name": "School Of Adoption USA",
+                    "profileImage": null,
+                    "description": "This channel is for information concerning the admission of students into our 3 year program as a partner of the university.",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Department",
+                    "targetAudience": "Student",
+                    "subscribers": 1,
+                    "admin_id": 3,
+                    "admin": {
+                        "id": 3,
+                        "firstname": "Perfection",
+                        "lastname": "Reward",
+                        "email": "rewardperfection@gmail.com",
+                        "user_type": "non Student",
+                        "username": "rewardrex",
+                        "user_image": null,
+                        "primary_institution_id": 3,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            7,
+                            10,
+                            11,
+                            12
+                        ],
+                        "created_at": "2024-07-22T15:43:14.000000Z",
+                        "updated_at": "2024-07-29T12:32:59.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "firstname": "Emmanuel",
+            "lastname": "Elaigwu",
+            "email": "elaigwu142@gmail.com",
+            "channels": [],
+            "sub_channels": [
+                {
+                    "id": 6,
+                    "name": "School Of International Relations",
+                    "profileImage": null,
+                    "description": "This channel provides information concerning the international exchange program.",
+                    "rating": 0,
+                    "type": "Public",
+                    "category": "Department",
+                    "targetAudience": "Student",
+                    "subscribers": 1,
+                    "admin_id": 4,
+                    "admin": {
+                        "id": 4,
+                        "firstname": "Emmanuel",
+                        "lastname": "Elaigwu",
+                        "email": "elaigwu142@gmail.com",
+                        "user_type": "student",
+                        "username": "Emrys",
+                        "user_image": null,
+                        "primary_institution_id": 1,
+                        "saved_posts": null,
+                        "reset_password": false,
+                        "channels_subscribed": [
+                            1
+                        ],
+                        "subchannels_subscribed": [
+                            6
+                        ],
+                        "created_at": "2024-07-22T15:46:40.000000Z",
+                        "updated_at": "2024-07-27T10:57:47.000000Z"
+                    },
+                    "subchannelWebsite": null,
+                    "status": "active",
+                    "deleted": false,
+                    "primary_institution_id": 1
+                }
+            ]
+        }
+    ]
+}
