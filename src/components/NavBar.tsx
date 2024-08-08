@@ -85,6 +85,8 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         <Bars3BottomLeftIcon className="w-8 h-8" />
       </button>
 
+      <span className="ml-3 text-sm font-semibold text-[#003431]">Institution Name</span>
+
       <ul className="ml-auto flex items-center">
         {isLoading && (
           <span
