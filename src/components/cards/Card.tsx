@@ -1,11 +1,12 @@
 import React, { ReactElement } from "react";
+import ArrDownIcon from "../../assets/Arrow drop down.svg";
 
 interface CardProps {
   className: string;
   amount: number;
   title: string;
-  icon: ReactElement | null;
-  iconParentClass: string;
+  icon?: ReactElement;
+  iconParentClass?: string;
   children: ReactElement | null;
 }
 
@@ -18,18 +19,21 @@ const Card: React.FC<CardProps> = ({
   children
 }) => {
   return (
-    <div className={`${className} rounded-md p-6 shadow-md shadow-black/5`}>
+    <div className={`${className} rounded-[20px] p-6 shadow-md shadow-black/5`}>
       <div className="flex justify-between mb-6">
         <div>
           <div className="flex items-center mb-1 gap-2">
-            <div className="text-2xl font-semibold">{amount}</div>
+            <div className="text-3xl font-semibold text-black">{amount}</div>
             {icon && <div className={`p-1 ${iconParentClass}`}>{icon}</div>}
           </div>
-          <div className="text-sm font-medium">{title}</div>
+          <div className="text-base font-medium text-black">{title}</div>
         </div>
       </div>
 
-      {children}
+      <div className="w-[99px] h-[24px] flex">
+        {children}
+        <img src={ArrDownIcon} alt="arrDownIcon" />
+      </div>
     </div>
   );
 };

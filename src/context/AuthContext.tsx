@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
 interface UserDataProps {
     user: object,
@@ -17,7 +17,7 @@ interface UserDataProps {
 interface AuthContextProps {
   isAuthenticated: boolean;
   login: (userData: UserDataProps) => void;
-  refresh: (newData: UserDataProps) => void;
+  updateUser: (newData: Partial<UserDataProps>) => void;
   logout: () => void;
   userData: any;
 }
@@ -29,34 +29,62 @@ interface AuthProviderProps {
 export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   login: () => {},
-  refresh: () => {},
+  updateUser: () => {},
   logout: () => {},
   userData: {},
 });
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userData, setUserData] = useState<UserDataProps|object>({});
+    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+        const storedUserData = sessionStorage.getItem('userData');
+        return storedUserData ? true : false;
+      });
+
+      const [userData, setUserData] = useState<UserDataProps | object>(() => {
+        const storedUserData = sessionStorage.getItem('userData');
+        return storedUserData ? JSON.parse(storedUserData) : {};
+      });
 
   const login = (data: UserDataProps) => {
+    sessionStorage.setItem('userData', JSON.stringify(data));
     setIsAuthenticated(true);
     setUserData(data);
   };
 
-  const refresh = (data: UserDataProps) => {
-    const mergedChange = { ...userData, ...data };
-    setUserData(mergedChange);
+  const updateUser = (data: Partial<UserDataProps>) => {
+    setUserData((prevState) => {
+        if (!prevState) return {};
+
+        const updatedUserData = {
+          ...prevState,
+          user: {
+            ...prevState,
+            ...data,
+          },
+        };
+
+        sessionStorage.setItem('userData', JSON.stringify(updatedUserData));
+        return updatedUserData;
+      });
   };
 
   const logout = () => {
+    sessionStorage.removeItem('userData');
     setIsAuthenticated(false);
     setUserData({});
   };
 
+  useEffect(() => {
+    if (!isAuthenticated || !userData) {
+      setIsAuthenticated(false);
+      sessionStorage.removeItem('userData');
+    }
+  }, [userData, isAuthenticated]);
+
   const authContextValue = {
     isAuthenticated,
     login,
-    refresh,
+    updateUser,
     logout,
     userData,
   };

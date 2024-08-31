@@ -1,16 +1,28 @@
 {
    "name": [
       {
-         "title": "Dashboard",
+         "title": "Home",
          "url": "#home"
       },
       {
-         "title": "Admins",
-         "url": "#mda"
+         "title": "Channels",
+         "url": "#channels"
       },
       {
-         "title": "Channels",
-         "url": "#cta"
+         "title": "Content",
+         "url": "#content"
+      },
+      {
+         "title": "Insights",
+         "url": "#insights"
+      },
+      {
+         "title": "Alerts",
+         "url": "#alerts"
+      },
+      {
+         "title": "Settings",
+         "url": "#settings"
       }
    ]
 }
