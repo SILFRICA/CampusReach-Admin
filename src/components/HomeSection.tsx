@@ -1,10 +1,5 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import {
-  UsersIcon,
-  BuildingOfficeIcon,
-  NewspaperIcon,
-} from "@heroicons/react/20/solid";
 import Card from "./cards/Card";
 
 interface PostStats {
@@ -19,7 +14,7 @@ const HomeSection: React.FC = () => {
   const [postStat, setPostStat] = useState<number>(amountOfPost.all);
 
   const handlePostAmountFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const index: keyof PostStats = e.target.value;
+    const index = e.target.value as keyof PostStats;
     setPostStat(amountOfPost[index]);
   };
 
