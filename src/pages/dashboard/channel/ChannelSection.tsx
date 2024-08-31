@@ -57,7 +57,7 @@ const ChannelSection: React.FC = () => {
   };
   return (
     <section className="text-lg lg:text-xl lg:min-h-screen" id="cta">
-      <h3 className="font-bold">Super Action</h3>
+      <h3 className="font-semibold">Super Action</h3>
       <br />
 
       <div>
@@ -83,9 +83,9 @@ const ChannelSection: React.FC = () => {
                 href="#download-mobile-app"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "channel"
-                    ? "border-teal-300 text-teal-700"
+                    ? "border-teal-300 text-black"
                     : "border-transparent hover:border-teal-300 hover:text-teal-700"
-                } px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
+                } px-1 pb-4 text-sm font-medium text-black transition-colors`}
                 onClick={() => handleActiveTab("channel")}
               >
                 <svg
@@ -109,9 +109,9 @@ const ChannelSection: React.FC = () => {
                 href="#excel-sheet-4-bulk-data"
                 className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
                   activeTab === "excel"
-                    ? "border-teal-300 text-teal-700"
+                    ? "border-teal-300 text-black"
                     : "border-transparent hover:border-teal-300 hover:text-teal-700"
-                } px-1 pb-4 text-sm font-medium text-teal-500 transition-colors`}
+                } px-1 pb-4 text-sm font-medium text-black transition-colors`}
                 onClick={() => handleActiveTab("excel")}
               >
                 <svg
@@ -135,7 +135,7 @@ const ChannelSection: React.FC = () => {
         </div>
       </div>
       <br />
-      <div className="lg:h-48 py-4 lg:py-0 flex justify-center items-center border border-gray-300 rounded-md text-center transition-colors hover:bg-gray-50">
+      <div className="lg:h-48 py-4 lg:py-0 flex justify-center items-center border border-[#03CF79] rounded-md text-center bg-[#DFF9EE]">
         {activeTab === "channel" ? (
           <small className="text-red-600">
             <a href="https://play.google.com/store/apps/details?id=com.mobile.silfrica">
@@ -171,11 +171,11 @@ const ChannelSection: React.FC = () => {
               />
               <button
                 type="submit"
-                className="group relative inline-block overflow-hidden border border-teal-600 px-3 py-2 focus:outline-none focus:ring rounded-md"
+                className="group relative inline-block overflow-hidden border border-[#03CF79] px-3 py-2 focus:outline-none focus:ring rounded-md"
               >
-                <span className="absolute inset-y-0 left-0 w-[2px] bg-teal-600 transition-all group-hover:w-full group-active:bg-teal-500"></span>
+                <span className="absolute inset-y-0 left-0 w-[2px] bg-[#03CF79] transition-all group-hover:w-full group-active:bg-[#03CF79]"></span>
 
-                <span className="relative text-sm font-medium text-teal-600 transition-colors group-hover:text-white">
+                <span className="relative text-sm font-medium text-black transition-colors group-hover:text-white">
                   submit
                 </span>
               </button>

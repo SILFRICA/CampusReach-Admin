@@ -7,9 +7,9 @@ interface AdminTableProps {
 
 const AdminTable: React.FC<AdminTableProps> = ({headers, children}) => {
   return (
-    <table className="min-w-full divide-y-2 divide-gray-200 bg-white text-sm">
+    <table className="min-w-full bg-white text-sm">
         <thead className="text-left">
-            <tr>
+            <tr className='border border-[##03CF79] bg-[#DFF9EE]'>
             {headers.map((header) => (
                 <th
                     key={header}
@@ -20,8 +20,9 @@ const AdminTable: React.FC<AdminTableProps> = ({headers, children}) => {
             ))}
             </tr>
         </thead>
+        <br />
 
-        <tbody className="divide-y divide-gray-200">
+        <tbody className="divide-y border border-[#0E1428]">
             {children}
         </tbody>
     </table>

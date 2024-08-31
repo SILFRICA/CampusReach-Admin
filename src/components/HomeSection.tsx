@@ -18,8 +18,9 @@ const HomeSection: React.FC = () => {
   const amountOfPost: PostStats = userData.post_stats;
   const [postStat, setPostStat] = useState<number>(amountOfPost.all);
 
-  const handlePostAmountFilter = (key: keyof PostStats) => {
-    setPostStat(amountOfPost[key]);
+  const handlePostAmountFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const index: keyof PostStats = e.target.value;
+    setPostStat(amountOfPost[index]);
   };
 
   const handleAmountOfChannels = (arr1: number[], arr2: number[]): number => {
@@ -39,56 +40,43 @@ const HomeSection: React.FC = () => {
     <div id="home">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6 text-[#003431]">
         <Card
-          className="bg-white border border-l-4 border-l-teal-600"
-          amount={numberOfChannels}
-          icon={<BuildingOfficeIcon className="w-6 h-6" />}
-          iconParentClass="bg-[#4dfbd9] rounded-full"
-          title="Number of Channels"
+          className="bg-[#E8DF11]"
+          amount={postStat}
+          title="Posts created"
           children={
-            <span className="text-[#028374] font-medium text-sm hover:text-[#0c554d]">
-              All
-            </span>
+            <select
+            defaultValue={postStat}
+            className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent"
+            onChange={(e) => handlePostAmountFilter(e)}
+            >
+              <option value="all">All</option>
+              <option value="last_7_days">Last 7 days</option>
+              <option value="last_30_days">Last 30 days</option>
+            </select>
           }
         />
         <Card
-          className="bg-white border border-l-4 border-l-teal-600"
+          className="bg-[#03CF79]"
+          amount={numberOfChannels}
+          title="Active channels"
+          children={
+            <select className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent">
+              <option value="all">All</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
+          }
+        />
+        <Card
+          className="bg-[#FF2055]"
           amount={userData.user.campus_population}
-          icon={<UsersIcon className="w-6 h-6" />}
-          iconParentClass="bg-[#4dfbd9] rounded-full"
           title="Campus Population"
           children={
-            <span className="text-[#028374] font-medium text-sm hover:text-[#0c554d]">
-              All
-            </span>
-          }
-        />
-        <Card
-          className="bg-white border border-l-4 border-l-teal-600"
-          amount={postStat}
-          icon={<NewspaperIcon className="w-6 h-6" />}
-          iconParentClass="bg-[#4dfbd9] rounded-full"
-          title="Number of Posts created"
-          children={
-            <div className="flex gap-2">
-              <span
-                className="text-[#028374] font-medium text-sm hover:text-[#0c554d] cursor-pointer"
-                onClick={() => handlePostAmountFilter("all")}
-              >
-                All
-              </span>
-              |
-              <span className="text-[#028374] font-medium text-sm hover:text-[#0c554d] cursor-pointer"
-              onClick={() => handlePostAmountFilter("last_7_days")}
-              >
-                Last 7 Days
-              </span>
-              |
-              <span className="text-[#028374] font-medium text-sm hover:text-[#0c554d] cursor-pointer"
-              onClick={() => handlePostAmountFilter("last_30_days")}
-              >
-                Last 30 Days
-              </span>
-            </div>
+            <select className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent">
+              <option value="all">All</option>
+              <option value="7">Last 7 days</option>
+              <option value="30">Last 30 days</option>
+            </select>
           }
         />
       </div>

@@ -119,7 +119,7 @@ const ManageAdmins: React.FC = () => {
 
   return (
     <section className="text-lg lg:text-xl min-h-full" id="mda">
-      <h3 className="font-bold">View all admins</h3>
+      <h3 className="font-semibold text-xl text-black">View all admins</h3>
       <br />
 
       <div className="flex gap-3 items-center h-12">
@@ -129,13 +129,13 @@ const ManageAdmins: React.FC = () => {
           value={searchQuery}
           onChange={handleSearchChange}
           placeholder="🔍 Search by email or channel name"
-          className="w-2/3 h-full px-4 py-2 border border-gray-300 focus-within:outline-teal-500 rounded-lg"
+          className="w-2/3 h-full px-4 py-2 border border-[#03CF79] focus-within:outline-teal-500 bg-[#DFF9EE] rounded-sm"
         />
       {/* filter based field here */}
       <select
         value={selectedCategory ?? ""}
         onChange={handleCategoryChange}
-        className="w-1/3 h-full px-4 py-2 border border-gray-300 focus-within:outline-teal-500 rounded-lg"
+        className="w-1/3 h-full px-4 py-2 border border-[#03CF79] focus-within:outline-teal-500 rounded-sm bg-[#DFF9EE]"
       >
         <option value="">All Categories</option>
         <option value="Administration">Administration</option>
@@ -149,8 +149,8 @@ const ManageAdmins: React.FC = () => {
 
       <br />
 
-      <div className="rounded-lg border border-gray-200">
-        <div className="overflow-x-auto rounded-t-lg">
+      <div className="rounded-sm border border-gray-200">
+        <div className="overflow-x-auto rounded-sm">
         <AdminTable headers={tableHeadings}>
             <>
               {currentAdmins.length > 0 ? (
@@ -161,7 +161,7 @@ const ManageAdmins: React.FC = () => {
                     const isSuspended = admin.suspended_admins?.includes(admin.id) ?? false;
 
                     return (
-                        <tr key={index}>
+                        <tr key={index} className="border border-[#0E1428]">
                             <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                                 {admin.email}
                             </td>
@@ -208,7 +208,7 @@ const ManageAdmins: React.FC = () => {
                 })
               ) : (
                 <tr>
-                  <td className="text-center text-xl text-teal-900" colSpan={4}>
+                  <td className="text-center text-xl text-orange-900" colSpan={4}>
                     No data available!😥
                   </td>
                 </tr>
@@ -217,7 +217,7 @@ const ManageAdmins: React.FC = () => {
           </AdminTable>
         </div>
 
-        <div className="rounded-b-lg border-t border-gray-200 px-4 py-2">
+        <div className="rounded-sm border border-[#03CF79] bg-[#DFF9EE] px-4 py-2 mt-4">
           <div className="flex justify-end items-center gap-3">
             <button
               onClick={prevPage}
@@ -229,18 +229,7 @@ const ManageAdmins: React.FC = () => {
               }`}
             >
               <span className="sr-only">Previous Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 01-1.414 1.414l-4-4a1 1 010-1.414l4-4a1 1 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <small>&larr;</small>
             </button>
 
             <p className="text-xs text-gray-900">
@@ -259,18 +248,7 @@ const ManageAdmins: React.FC = () => {
               }`}
             >
               <span className="sr-only">Next Page</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-3 w-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M7.293 14.707a1 1 010-1.414L10.586 10 7.293 6.707a1 1 011.414-1.414l4 4a1 1 010 1.414l-4 4a1 1 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <small>&rarr;</small>
             </button>
           </div>
         </div>

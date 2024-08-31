@@ -5,6 +5,7 @@ import SideBar from "../components/SideBar";
 import ChannelSection from "./dashboard/channel/ChannelSection";
 import ManageAdmins from "./dashboard/admins/ManageAdmins";
 import HomeSection from "../components/HomeSection";
+import Greeting from "../components/Greeting";
 
 const PageLayout: React.FC = () => {
   const mainRef = useRef<HTMLDivElement>(null);
@@ -48,6 +49,14 @@ const PageLayout: React.FC = () => {
       >
         <NavBar sidebarToggle={handleSideBarToggle} />
         <div className="p-6">
+            <div className="w-full flex justify-between">
+                <Greeting/>
+
+                <p className="w-[169px] h-[36px] -mt-2 flex items-center justify-center bg-[#03CF79] text-white cursor-pointer">
+                    Add channel
+                </p>
+            </div>
+            <br />
           <HomeSection />
           <br />
           <ManageAdmins />
