@@ -1,5 +1,5 @@
 import React, { forwardRef, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
@@ -9,7 +9,7 @@ const SideBar = forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >((props, ref) => {
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
   const { userData } = useContext(AuthContext);
   const [activeTab, setActiveTab] = useState<string>("Home");
 
