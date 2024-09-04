@@ -10,12 +10,21 @@ import {
   Channels,
 } from "./AdminsChannelsTypes";
 import AdminTable from "../../../components/tables/AdminTable";
+import DeleteModal from "../../../components/modals/actionPrompts/DeleteModal";
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [activeModalData, setActiveModalData] = useState<number | string>("");
+
+  const openDeleteModal = (data: number) => {
+    setActiveModalData(data);
+    setIsDeleteModalOpen(true);
+  };
+  const closeDeleteModal = () => setIsDeleteModalOpen(false);
   const tableHeadings: string[] = [
     "Email Address",
     "Channel Name",
@@ -142,6 +151,15 @@ const ManageAdmins: React.FC = () => {
     // Implement the unsuspend logic here
   };
 
+  const handleDelete = (channelId: number | string) => {
+    console.log(`Deleting this ${channelId}`);
+    alert(`Deleted this ${channelId}`);
+  };
+
+  const handleMessage = (email: string) => {
+    console.log(`Messaging this admin: ${email}`);
+  };
+
   return (
     <section className="text-lg lg:text-xl min-h-full" id="mda">
       <h3 className="font-semibold text-xl text-black">View all admins</h3>
@@ -190,7 +208,10 @@ const ManageAdmins: React.FC = () => {
                     admin.suspended_admins?.includes(admin.id) ?? false;
 
                   return (
-                    <tr key={index} className="border border-[#0E1428]">
+                    <tr
+                      key={index}
+                      className="border border-[#0E1428] rounded-md"
+                    >
                       <td className="whitespace-nowrap px-4 py-2 text-gray-700">
                         {admin.email}
                       </td>
@@ -217,7 +238,9 @@ const ManageAdmins: React.FC = () => {
                             </button>
                             {/*btn to delete channel that has pending admin*/}
                             <button
-                              onClick={() => handleSuspendAdmin(admin.name)}
+                              onClick={() =>
+                                openDeleteModal(admin.sub_channel_id)
+                              }
                               className="p-1 w-[90px] bg-[#FF2055] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
                               Delete
@@ -228,16 +251,22 @@ const ManageAdmins: React.FC = () => {
                         ) : (
                           <>
                             <button
-                              onClick={() => handleUnsuspendAdmin(admin.email)}
-                              disabled={isSuspended}
+                              onClick={
+                                isSuspended
+                                  ? () => handleUnsuspendAdmin(admin.email)
+                                  : () => handleMessage(admin.email)
+                              }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
                             >
                               {isSuspended ? "Unsuspend" : "Message"}
                             </button>
                             <span className="mr-1" />
                             <button
-                              onClick={() => handleSuspendAdmin(admin.email)}
-                              disabled={!isSuspended}
+                              onClick={
+                                isSuspended
+                                  ? () => handleSuspendAdmin(admin.email)
+                                  : () => openDeleteModal(admin.sub_channel_id)
+                              }
                               className={`p-1 w-[90px] ${!isSuspended ? "bg-[#FF2055] cursor-not-allowed" : "bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2"} text-black`}
                             >
                               {!isSuspended ? "Suspend" : "Delete"}
@@ -262,18 +291,17 @@ const ManageAdmins: React.FC = () => {
           </AdminTable>
         </div>
 
-        <div className="rounded-sm border border-[#03CF79] bg-[#DFF9EE] px-4 py-2 mt-4">
+        <div className="px-4 py-2 mt-4">
           <div className="flex justify-end items-center gap-3">
             <button
               onClick={prevPage}
               disabled={currentPage === 1}
-              className={`inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-50 ${currentPage === 1
+              className={`inline-flex w-[103px] items-center justify-center border-none bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-50 ${currentPage === 1
                   ? "cursor-not-allowed opacity-50"
                   : "cursor-pointer"
                 }`}
             >
-              <span className="sr-only">Previous Page</span>
-              <small>&larr;</small>
+              Back
             </button>
 
             <p className="text-xs text-gray-900">
@@ -285,17 +313,42 @@ const ManageAdmins: React.FC = () => {
             <button
               onClick={nextPage}
               disabled={currentPage === totalPages}
-              className={`inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-50 ${currentPage === totalPages
+              className={`inline-flex w-[103px] items-center border-none justify-center bg-[#03CF79] text-white rtl:rotate-180 hover:bg-lime-500 ${currentPage === totalPages
                   ? "cursor-not-allowed opacity-50"
                   : "cursor-pointer"
                 }`}
             >
-              <span className="sr-only">Next Page</span>
-              <small>&rarr;</small>
+              Next
             </button>
           </div>
         </div>
       </div>
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        children={
+          <div className="text-center">
+            <h1 className="text-2xl font-semibold text-black mb-4">
+              Delete this Channel?
+            </h1>
+            <p className="font-medium text-sm text-black mb-8">
+              Deleting this channel would delete all administrative access &
+              corresponding data
+            </p>
+            <p className="w-full mt-4 flex justify-center items-center gap-20">
+              <span className="cursor-pointer" onClick={closeDeleteModal}>
+                Cancel
+              </span>
+              <span
+                className="bg-[#03CF79] text-white w-[131px] h-[36px] cursor-pointer justify-center flex items-center"
+                onClick={() => handleDelete(activeModalData)}
+              >
+                Confirm
+              </span>
+            </p>
+          </div>
+        }
+      />
     </section>
   );
 };
