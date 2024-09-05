@@ -14,6 +14,10 @@ import DeleteModal from "../../../components/modals/actionPrompts/DeleteModal";
 import axios from "axios";
 import apiUrl from "../../../data/axios";
 
+interface SuspendChannelResponse {
+  status: number;
+}
+
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
@@ -155,34 +159,46 @@ const ManageAdmins: React.FC = () => {
     }
   };
   
-
-  const handleSuspendAdmin = async (adminEmail: string) => {
+// to suspend subchannel or not
+  const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
     try {
-      const response = await axios.put(`${API_URL}/api/admin/suspend`, { email: adminEmail });
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+        user_id,           // Include user_id
+        sub_channel_id,    // Include sub_channel_id
+      }, { headers: {
+        'Authorization': `Bearer ${userData.token}`
+      }});
+  
       if (response.status === 200) {
-        alert(`Admin ${adminEmail} has been suspended.`);
+        alert("The channel has been suspended.");
         // Refresh data if necessary
       } else {
-        alert(`Failed to suspend admin ${adminEmail}.`);
+        alert("Failed to suspend channel");
       }
     } catch (error) {
       console.error(error);
-      alert(`An error occurred while suspending admin ${adminEmail}.`);
+      alert("An error occurred while suspending channel");
     }
   };
 
-  const handleUnsuspendAdmin = async (adminEmail: string) => {
+  const handleUnsuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
     try {
-      const response = await axios.put(`${API_URL}/api/admin/unsuspend`, { email: adminEmail });
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+        user_id,           // Include user_id
+        sub_channel_id,    // Include sub_channel_id
+      }, { headers: {
+        'Authorization': `Bearer ${userData.token}`
+      }});
+  
       if (response.status === 200) {
-        alert(`Admin ${adminEmail} has been unsuspended.`);
+        alert("The channel has been suspended.");
         // Refresh data if necessary
       } else {
-        alert(`Failed to unsuspend admin ${adminEmail}.`);
+        alert("Failed to suspend channel");
       }
     } catch (error) {
       console.error(error);
-      alert(`An error occurred while unsuspending admin ${adminEmail}.`);
+      alert("An error occurred while suspending channel");
     }
   };
 
@@ -298,7 +314,7 @@ const ManageAdmins: React.FC = () => {
                             <button
                               onClick={
                                 isSuspended
-                                  ? () => handleUnsuspendAdmin(admin.email)
+                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id])
                                   : () => handleMessage(admin.email)
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
@@ -310,7 +326,7 @@ const ManageAdmins: React.FC = () => {
                               isSuspended && (
                             <button
                               onClick={
-                                () => handleSuspendAdmin(admin.email)
+                                () => handleSuspendChannel([admin.id, admin.sub_channel_id])
                               }
                               className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
