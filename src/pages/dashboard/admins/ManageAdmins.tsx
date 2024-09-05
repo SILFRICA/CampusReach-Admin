@@ -385,10 +385,10 @@ const ManageAdmins: React.FC = () => {
         onClose={closeDeleteModal}
         children={
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-black mb-4">
+            <h1 className="text-lg md:text-2xl font-semibold text-black mb-4">
               Delete this Channel?
             </h1>
-            <p className="font-medium text-sm text-black mb-8">
+            <p className="text-xs w-full font-medium sm:text-sm text-black mb-8">
               Deleting this channel would delete all administrative access &
               corresponding data
             </p>
