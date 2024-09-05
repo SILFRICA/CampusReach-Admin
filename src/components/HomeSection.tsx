@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Card from "./cards/Card";
+import ArrDownIcon from "../assets/Arrow drop down.svg";
 
 interface PostStats {
   all: number;
@@ -28,7 +29,7 @@ const HomeSection: React.FC = () => {
 
   const numberOfChannels: number = handleAmountOfChannels(
     userData.channel_managed,
-    userData.subchannel_managed
+    userData.subchannel_managed,
   );
 
   return (
@@ -39,15 +40,21 @@ const HomeSection: React.FC = () => {
           amount={postStat}
           title="Posts created"
           children={
-            <select
-            defaultValue={postStat}
-            className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent"
-            onChange={(e) => handlePostAmountFilter(e)}
-            >
-              <option value="all">All</option>
-              <option value="last_7_days">Last 7 days</option>
-              <option value="last_30_days">Last 30 days</option>
-            </select>
+            <>
+              <select
+                id="postStat"
+                defaultValue={postStat}
+                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                onChange={(e) => handlePostAmountFilter(e)}
+              >
+                <option value="all">All</option>
+                <option value="last_7_days">Last 7 days</option>
+                <option value="last_30_days">Last 30 days</option>
+              </select>{" "}
+              <label htmlFor="postStat" className="cursor-pointer">
+                <img src={ArrDownIcon} alt="arrDownIcon" />
+              </label>
+            </>
           }
         />
         <Card
@@ -55,11 +62,19 @@ const HomeSection: React.FC = () => {
           amount={numberOfChannels}
           title="Active channels"
           children={
-            <select className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent">
-              <option value="all">All</option>
-              <option value="7">Last 7 days</option>
-              <option value="30">Last 30 days</option>
-            </select>
+            <>
+              <select
+                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                id="channels"
+              >
+                <option value="all">All</option>
+                <option value="7">Last 7 days</option>
+                <option value="30">Last 30 days</option>
+              </select>{" "}
+              <label htmlFor="channels" className="cursor-pointer">
+                <img src={ArrDownIcon} alt="arrDownIcon" />
+              </label>
+            </>
           }
         />
         <Card
@@ -67,11 +82,19 @@ const HomeSection: React.FC = () => {
           amount={userData.user.campus_population}
           title="Campus Population"
           children={
-            <select className="w-[68px] text-black font-medium text-xs appearance-none bg-transparent">
-              <option value="all">All</option>
-              <option value="7">Last 7 days</option>
-              <option value="30">Last 30 days</option>
-            </select>
+            <>
+              <select
+                className="w-4 cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                id="campus"
+              >
+                <option value="all">All</option>
+                <option value="7">Students</option>
+                <option value="30">Non-students</option>
+              </select>
+              <label htmlFor="campus" className="cursor-pointer">
+                <img src={ArrDownIcon} alt="arrDownIcon" />
+              </label>
+            </>
           }
         />
       </div>

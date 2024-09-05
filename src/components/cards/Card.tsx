@@ -1,5 +1,4 @@
 import React, { ReactElement } from "react";
-import ArrDownIcon from "../../assets/Arrow drop down.svg";
 
 interface CardProps {
   className: string;
@@ -16,7 +15,7 @@ const Card: React.FC<CardProps> = ({
   title,
   icon,
   iconParentClass,
-  children
+  children,
 }) => {
   return (
     <div className={`${className} rounded-[20px] p-6 shadow-md shadow-black/5`}>
@@ -30,10 +29,7 @@ const Card: React.FC<CardProps> = ({
         </div>
       </div>
 
-      <div className="w-[99px] h-[24px] flex">
-        {children}
-        <img src={ArrDownIcon} alt="arrDownIcon" />
-      </div>
+      <div className="w-[99px] h-[24px] flex">{children}</div>
     </div>
   );
 };

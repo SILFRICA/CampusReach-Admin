@@ -81,11 +81,10 @@ const ChannelSection: React.FC = () => {
             <nav className="-mb-px flex gap-6" aria-label="Tabs">
               <a
                 href="#download-mobile-app"
-                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
-                  activeTab === "channel"
+                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${activeTab === "channel"
                     ? "border-teal-300 text-black"
                     : "border-transparent hover:border-teal-300 hover:text-teal-700"
-                } px-1 pb-4 text-sm font-medium text-black transition-colors`}
+                  } px-1 pb-4 text-sm font-medium text-black transition-colors`}
                 onClick={() => handleActiveTab("channel")}
               >
                 <svg
@@ -107,11 +106,10 @@ const ChannelSection: React.FC = () => {
 
               <a
                 href="#excel-sheet-4-bulk-data"
-                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${
-                  activeTab === "excel"
+                className={`inline-flex shrink-0 items-center gap-2 border-b-2 ${activeTab === "excel"
                     ? "border-teal-300 text-black"
                     : "border-transparent hover:border-teal-300 hover:text-teal-700"
-                } px-1 pb-4 text-sm font-medium text-black transition-colors`}
+                  } px-1 pb-4 text-sm font-medium text-black transition-colors`}
                 onClick={() => handleActiveTab("excel")}
               >
                 <svg
@@ -166,12 +164,12 @@ const ChannelSection: React.FC = () => {
                 name="file"
                 id="excelSheet"
                 ref={fileInputRef}
-                className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
+                className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10 w-56 md:w-auto"
                 onChange={handleFileChange}
               />
               <button
                 type="submit"
-                className="group relative inline-block overflow-hidden border border-[#03CF79] px-3 py-2 focus:outline-none focus:ring rounded-md"
+                className="group relative inline-block overflow-hidden border border-[#03CF79] px-3 py-2 focus:outline-none focus:ring"
               >
                 <span className="absolute inset-y-0 left-0 w-[2px] bg-[#03CF79] transition-all group-hover:w-full group-active:bg-[#03CF79]"></span>
 
