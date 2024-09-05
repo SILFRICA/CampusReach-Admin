@@ -44,7 +44,7 @@ const HomeSection: React.FC = () => {
               <select
                 id="postStat"
                 defaultValue={postStat}
-                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                className="w-4 cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
                 onChange={(e) => handlePostAmountFilter(e)}
               >
                 <option value="all">All</option>
@@ -64,7 +64,7 @@ const HomeSection: React.FC = () => {
           children={
             <>
               <select
-                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                className="w-4 cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
                 id="channels"
               >
                 <option value="all">All</option>
