@@ -84,12 +84,12 @@ const HomeSection: React.FC = () => {
           children={
             <>
               <select
-                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
+                className="w-4 cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
                 id="campus"
               >
                 <option value="all">All</option>
-                <option value="7">Last 7 days</option>
-                <option value="30">Last 30 days</option>
+                <option value="7">Students</option>
+                <option value="30">Non-students</option>
               </select>
               <label htmlFor="campus" className="cursor-pointer">
                 <img src={ArrDownIcon} alt="arrDownIcon" />

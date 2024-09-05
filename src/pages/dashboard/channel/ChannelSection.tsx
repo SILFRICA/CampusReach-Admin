@@ -164,7 +164,7 @@ const ChannelSection: React.FC = () => {
                 name="file"
                 id="excelSheet"
                 ref={fileInputRef}
-                className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10"
+                className="p-2 bg-white rounded-md cursor-grab shadow-md shadow-teal-300/10 w-56 md:w-auto"
                 onChange={handleFileChange}
               />
               <button

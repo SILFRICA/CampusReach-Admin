@@ -1,12 +1,11 @@
-import React, {
-  MouseEvent,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import React, { MouseEvent, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Bars3BottomLeftIcon, EnvelopeIcon, PowerIcon } from "@heroicons/react/20/solid";
+import {
+  Bars3BottomLeftIcon,
+  EnvelopeIcon,
+  PowerIcon,
+} from "@heroicons/react/20/solid";
 import apiUrl from "../data/axios";
 import axios from "axios";
 import { handleAxiosError } from "../utils/axiosError";
@@ -23,33 +22,33 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
   const [isLoading, setIsLoading] = useState<string>("");
 
   // Function to toggle dropdown visibility
-//   const handleDropDownState = () => {
-//     if (dropDownRef.current) {
-//       dropDownRef.current.classList.toggle("hidden");
-//     }
-//   };
+  //   const handleDropDownState = () => {
+  //     if (dropDownRef.current) {
+  //       dropDownRef.current.classList.toggle("hidden");
+  //     }
+  //   };
 
   // Function to refresh data
-//   const handleDataRefresh = async () => {
-//     setIsLoading("refreshing...");
-//     try {
-//       const response = await axios.post(
-//         `${API_URL}/api/admin/refresh/data`,
-//         { user_id: userData.user.id },
-//         { headers: { Authorization: `Bearer ${userData.token}` } }
-//       );
+  //   const handleDataRefresh = async () => {
+  //     setIsLoading("refreshing...");
+  //     try {
+  //       const response = await axios.post(
+  //         `${API_URL}/api/admin/refresh/data`,
+  //         { user_id: userData.user.id },
+  //         { headers: { Authorization: `Bearer ${userData.token}` } }
+  //       );
 
-//       if (response.status === 200) {
-//         updateUser(response.data.data);
-//       } else {
-//         alert("Refresh failed. Please try again later!");
-//       }
-//     } catch (error) {
-//       handleAxiosError(error);
-//     } finally {
-//       setIsLoading("");
-//     }
-//   };
+  //       if (response.status === 200) {
+  //         updateUser(response.data.data);
+  //       } else {
+  //         alert("Refresh failed. Please try again later!");
+  //       }
+  //     } catch (error) {
+  //       handleAxiosError(error);
+  //     } finally {
+  //       setIsLoading("");
+  //     }
+  //   };
 
   const handleLogout = async () => {
     setIsLoading("signing out...");
@@ -57,7 +56,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
       await axios.post(
         `${API_URL}/api/logout`,
         {},
-        { headers: { Authorization: `Bearer ${userData.token}` } }
+        { headers: { Authorization: `Bearer ${userData.token}` } },
       );
 
       setTimeout(() => {
@@ -70,7 +69,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
   };
 
   // Effect to refresh data on userData change
-  useEffect(() => {}, [userData]);
+  useEffect(() => { }, [userData]);
 
   return (
     <div className="py-2 px-6 bg-white flex items-center border-b border-black sticky top-0 left-0 z-30">
@@ -82,14 +81,15 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         <Bars3BottomLeftIcon className="w-8 h-8" />
       </button>
 
-      <span className="ml-3 text-xl font-semibold text-black">{userData.institution.name ?? "Silfrica..."}</span>
+      <span className="ml-3 text-xs md:text-xl font-semibold text-black">
+        {userData.institution.name ?? "Silfrica..."}
+      </span>
 
       <ul className="ml-auto flex items-center">
         {isLoading && (
           <span
-            className={`${
-              isLoading === "syncing..." ? "bg-[#03CF79]" : "bg-[#FF2055]"
-            } text-white rounded-md px-2 animate-pulse`}
+            className={`${isLoading === "syncing..." ? "bg-[#03CF79]" : "bg-[#FF2055]"
+              } text-white rounded-md px-2 animate-pulse`}
           >
             {isLoading}
           </span>
@@ -97,12 +97,11 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         <li className="dropdown">
           <button
             type="button"
-            className={`text-black mr-4 w-8 h-8 rounded flex items-center justify-center hover:text-[#FF2055] ${
-              isLoading && "animate-pulse"
-            }`}
+            className={`text-black mr-4 w-8 h-8 rounded flex items-center justify-center hover:text-[#FF2055] ${isLoading && "animate-pulse"
+              }`}
             onClick={handleLogout}
           >
-            <PowerIcon className="w-5 h-5"/>
+            <PowerIcon className="w-5 h-5" />
           </button>
         </li>
         <button id="fullscreen-button" onClick={handleFullScreenMode}>
@@ -121,7 +120,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
         <li className="dropdown ml-3">
           <button type="button" className="dropdown-toggle flex items-center">
             <div className="flex-shrink-0 relative">
-                <EnvelopeIcon className="w-5 h-5"/>
+              <EnvelopeIcon className="w-5 h-5" />
             </div>
           </button>
         </li>
