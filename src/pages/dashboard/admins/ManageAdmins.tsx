@@ -258,7 +258,7 @@ const ManageAdmins: React.FC = () => {
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
                             >
-                              {isSuspended && "Unsuspend"}
+                              {isSuspended ? "Unsuspend" : "Message"}
                             </button>
                             <span className="mr-1" />
                             {
