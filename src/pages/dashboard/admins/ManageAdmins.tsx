@@ -258,19 +258,31 @@ const ManageAdmins: React.FC = () => {
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
                             >
-                              {isSuspended ? "Unsuspend" : "Message"}
+                              {isSuspended && "Unsuspend"}
                             </button>
                             <span className="mr-1" />
+                            {
+                              isSuspended && (
                             <button
                               onClick={
-                                isSuspended
-                                  ? () => handleSuspendAdmin(admin.email)
-                                  : () => openDeleteModal(admin.sub_channel_id)
+                                () => handleSuspendAdmin(admin.email)
                               }
-                              className={`p-1 w-[90px] ${!isSuspended ? "bg-[#FF2055] cursor-not-allowed" : "bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2"} text-black`}
+                              className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
-                              {!isSuspended ? "Suspend" : "Delete"}
+                              Suspend
                             </button>
+                              )
+                            }
+                            { !isSuspended && (
+                            <button
+                              onClick={
+                                  () => openDeleteModal(admin.sub_channel_id)
+                              }
+                              className="p-1 w-[90px] bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
+                            >
+                              Delete
+                            </button>)
+                }
                           </>
                         )}
                       </td>
