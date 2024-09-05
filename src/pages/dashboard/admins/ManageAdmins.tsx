@@ -11,6 +11,8 @@ import {
 } from "./AdminsChannelsTypes";
 import AdminTable from "../../../components/tables/AdminTable";
 import DeleteModal from "../../../components/modals/actionPrompts/DeleteModal";
+import axios from "axios";
+import apiUrl from "../../../data/axios";
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
@@ -19,6 +21,7 @@ const ManageAdmins: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [activeModalData, setActiveModalData] = useState<number | string>("");
+  const API_URL = apiUrl("production");
 
   const openDeleteModal = (data: number) => {
     setActiveModalData(data);
@@ -130,34 +133,76 @@ const ManageAdmins: React.FC = () => {
     setCurrentPage(1); // Reset to the first page whenever the category changes
   };
 
-  const resendInvite = (
+  const resendInvite = async (
     email: string,
     channelId: number | null,
-    subChannelId: number | null,
+    subChannelId: number | null
   ) => {
-    // Resend invite logic
-    console.log(
-      `Resending invite to ${email} for channel ${channelId} and sub-channel ${subChannelId}`,
-    );
+    try {
+      const response = await axios.post(`${API_URL}/api/admin/resend-invite`, {
+        email,
+        channelId,
+        subChannelId,
+      });
+      if (response.status === 200) {
+        alert(`Invite resent to ${email}.`);
+      } else {
+        alert(`Failed to resend invite to ${email}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while resending invite to ${email}.`);
+    }
+  };
+  
+
+  const handleSuspendAdmin = async (adminEmail: string) => {
+    try {
+      const response = await axios.put(`${API_URL}/api/admin/suspend`, { email: adminEmail });
+      if (response.status === 200) {
+        alert(`Admin ${adminEmail} has been suspended.`);
+        // Refresh data if necessary
+      } else {
+        alert(`Failed to suspend admin ${adminEmail}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while suspending admin ${adminEmail}.`);
+    }
   };
 
-  const handleSuspendAdmin = (adminEmail: string) => {
-    console.log(`Suspending admin: ${adminEmail}`);
-    // Implement the suspend logic here
+  const handleUnsuspendAdmin = async (adminEmail: string) => {
+    try {
+      const response = await axios.put(`${API_URL}/api/admin/unsuspend`, { email: adminEmail });
+      if (response.status === 200) {
+        alert(`Admin ${adminEmail} has been unsuspended.`);
+        // Refresh data if necessary
+      } else {
+        alert(`Failed to unsuspend admin ${adminEmail}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while unsuspending admin ${adminEmail}.`);
+    }
   };
 
-  const handleUnsuspendAdmin = (adminEmail: string) => {
-    console.log(`Unsuspending admin: ${adminEmail}`);
-    // Implement the unsuspend logic here
-  };
-
-  const handleDelete = (channelId: number | string) => {
-    console.log(`Deleting this ${channelId}`);
-    alert(`Deleted this ${channelId}`);
+  const handleDelete = async (channelId: number | string) => {
+    try {
+      const response = await axios.delete(`${API_URL}/api/channel/${channelId}`);
+      if (response.status === 200) {
+        alert(`Deleted channel ${channelId} successfully.`);
+        // You can refresh data here to update the UI after deletion
+      } else {
+        alert(`Failed to delete channel ${channelId}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while deleting channel ${channelId}.`);
+    }
   };
 
   const handleMessage = (email: string) => {
-    prompt(`You will be sending to this admin: ${email}`);
+    window.location.href = `mailto:${email}`;
   };
 
   return (
