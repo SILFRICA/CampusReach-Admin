@@ -157,7 +157,7 @@ const ManageAdmins: React.FC = () => {
   };
 
   const handleMessage = (email: string) => {
-    console.log(`Messaging this admin: ${email}`);
+    prompt(`You will be sending to this admin: ${email}`);
   };
 
   return (
