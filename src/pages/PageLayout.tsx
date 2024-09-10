@@ -8,7 +8,6 @@ import ManageAdmins from "./dashboard/admins/ManageAdmins";
 import HomeSection from "../components/HomeSection";
 import Greeting from "../components/Greeting";
 import CreateChannelModal from "@/components/modals/channels/channel-creation-modal";
-import { Dialog } from "@/components/ui/dialog";
 
 const PageLayout: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false)
