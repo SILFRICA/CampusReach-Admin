@@ -19,7 +19,7 @@ interface FormData {
   category: string;
   targetAudience: string;
   subchannelWebsite: string;
-  profileImage: undefined | File;
+  profileImage?: File;
   adminPermissions: {
     createPosts: boolean;
     receiveEmailEnquiries: boolean;
