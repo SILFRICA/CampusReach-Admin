@@ -117,7 +117,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     // Prepare form data
     const form = new FormData();
     form.append('user_id', userData.user.id);  // Add user_id
-    form.append('channel_id', userData.channels_managed[0]);  // Add channel_id
+    form.append('channel_id', userData.channel_managed[0]);  // Add channel_id
     form.append('name', formData.name);
     form.append('description', formData.description);
     form.append('category', formData.category);
@@ -135,6 +135,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
         method: 'POST',
         headers: {
           'Accept': 'application/json',
+          'Authorization': `Bearer ${userData.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
         },
         body: form,
