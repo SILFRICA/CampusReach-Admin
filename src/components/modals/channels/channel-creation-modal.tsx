@@ -134,9 +134,10 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
 
     try {
         const API_URL = apiUrl("production");
-      const response = await axios.post(`${API_URL}/api/subchannel`, {form}, {
+      const response = await axios.post(`${API_URL}/api/subchannel`, form, {
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${userData.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
         }});
