@@ -11,6 +11,8 @@ import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { Toast, ToastProvider } from "@/components/ui/toast"
 import { AuthContext } from '@/context/AuthContext'
+import apiUrl from '@/data/axios'
+import axios from 'axios'
 
 interface FormData {
   type: "public" | "private";
@@ -131,28 +133,43 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     form.append('type', formData.type);
 
     try {
-      const response = await fetch('https://test-api.silfrica.com/api/subchannel', {
-        method: 'POST',
+        const API_URL = apiUrl("production");
+      const response = await axios.post(`${API_URL}/api/subchannel`, {form}, {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${userData.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
-        },
-        body: form,
-      });
+        }});
 
-      if (!response.ok) {
+      if (response.status !== 201) {
         throw new Error('Failed to create channel');
       }
 
-      const channel = await response.json();
+      const channel = await response.data.data;
       console.log(channel);
       toast({
         title: "Success",
         description: "Channel created successfully!",
       });
     } catch (error) {
-      console.error('Error creating channel:', error);
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+              // Server responded with a status other than 2xx
+              console.error("Process failed. Please try again.");
+            } else if (error.request) {
+              // No response was received from the server
+              console.error(
+                "Network error. Please check your connection and try again."
+              );
+            } else {
+              // Something else happened while setting up the request
+              console.error("An unexpected error occurred. Please try again.");
+            }
+          } else {
+            // Non-Axios error
+            console.error("An unexpected error occurred. Please try again.");
+          }
+          console.error("channel error:", error);
       toast({
         title: "Error",
         description: "Failed to create channel. Please try again.",
