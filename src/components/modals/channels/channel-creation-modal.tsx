@@ -264,7 +264,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
           <div className="space-y-4">
             <div>
               <Label htmlFor="primaryAudience">Primary audience</Label>
-              <Select name="targetAudience" onValueChange={(value) => setFormData(prev => ({ ...prev, primaryAudience: value }))}>
+              <Select name="targetAudience" onValueChange={(value) => setFormData(prev => ({ ...prev, targetAudience: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tap to select category" />
                 </SelectTrigger>
