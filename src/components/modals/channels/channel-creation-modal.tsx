@@ -8,8 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import { useToast } from "@/hooks/use-toast"
-import { Toast, ToastProvider } from "@/components/ui/toast"
+import toast, {Toaster} from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
 import apiUrl from '@/data/axios'
 import axios from 'axios'
@@ -38,6 +37,15 @@ interface CreateChannelModalProps {
     onOpenChange: (open: boolean) => void;
 }
 
+interface ChannelCreatedResponse {
+    id: number|string;
+    channel_id: number|string;
+    admin_id: number|string;
+    name: string;
+    type: string;
+    description: string;
+}
+
 export default function CreateChannelModal({ open, onOpenChange }: CreateChannelModalProps) {
     const {userData} = useContext(AuthContext)
   const [step, setStep] = useState(1)
@@ -60,7 +68,15 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     adminInstructions: ""
   })
   const [isLoading, setIsLoading] = useState(false)
-  const { toast } = useToast()
+  const [isSkipped, setIsSkipped] = useState(false)
+  const [isResponse, setIsResponse] = useState<ChannelCreatedResponse>({
+    id: "",
+    channel_id: userData.channel_managed[0],
+    admin_id: userData.user.id,
+    name: "",
+    type: "",
+    description: ""
+  })
 
   const typeDesc = ['Information from this channel would be accessible to all users on the platform. Suitable for communicating with the general campus community or specific subsets.', 'Information from this channel would be accessible to only users granted access on the platform. Suitable for communication between staffs, heads of department and selected individuals.'];
 
@@ -113,6 +129,14 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     }
   }
 
+  const handleProceedWithAdmin = () => {
+    if (step === 4) {
+        handleSubmit()
+        setIsLoading(false)
+        setStep(step + 1)
+    }
+  }
+
   const handleSubmit = async () => {
     setIsLoading(true);
 
@@ -143,44 +167,99 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
         }});
 
       if (response.status !== 201) {
+        toast.error('Failed')
         throw new Error('Failed to create channel');
       }
 
-      const channel = await response.data.data;
+      const channel: ChannelCreatedResponse = await response.data.data;
       console.log(channel);
-      toast({
-        title: "Success",
-        description: "Channel created successfully!",
-      });
+      setIsResponse(channel);
+      toast.success('Channel created!')
+      setIsSkipped(true)
     } catch (error) {
         if (axios.isAxiosError(error)) {
             if (error.response) {
               // Server responded with a status other than 2xx
+              toast.error('process failed')
               console.error("Process failed. Please try again.");
             } else if (error.request) {
               // No response was received from the server
+              toast.error('network error')
               console.error(
                 "Network error. Please check your connection and try again."
               );
             } else {
               // Something else happened while setting up the request
+              toast.error('unexpected error')
               console.error("An unexpected error occurred. Please try again.");
             }
           } else {
             // Non-Axios error
+            toast.error('something went wrong')
             console.error("An unexpected error occurred. Please try again.");
           }
           console.error("channel error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to create channel. Please try again.",
-        variant: "destructive",
-      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddAdmin = async () => {
+    setIsLoading(true);
+    const adminInvite = {
+        channel_id: isResponse.channel_id,
+        sub_channel_id: isResponse.id,
+        user_id: isResponse.admin_id,
+        email_invited: formData.adminEmail,
+        email_body: formData.adminInstructions
+    }
+
+    try {
+        const API_URL = apiUrl("production");
+      const response = await axios.post(`${API_URL}/api/email/invite/user`, adminInvite, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.token}`
+          // No need for 'Content-Type' here, fetch automatically sets it for FormData
+        }});
+
+      if (response.status !== 200) {
+        toast.error('Failed to add')
+        throw new Error('Failed to invite admin');
+      }
+
+      const channel = await response.data.data;
+      console.log(channel);
+      toast.success('Admin Invited!')
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            if (error.response) {
+              // Server responded with a status other than 2xx
+              toast.error('process failed')
+              console.error("Process failed. Please try again.");
+            } else if (error.request) {
+              // No response was received from the server
+              toast.error('network error')
+              console.error(
+                "Network error. Please check your connection and try again."
+              );
+            } else {
+              // Something else happened while setting up the request
+              toast.error('unexpected error')
+              console.error("An unexpected error occurred. Please try again.");
+            }
+          } else {
+            // Non-Axios error
+            toast.error('something went wrong')
+            console.error("An unexpected error occurred. Please try again.");
+          }
+          console.error("admin add error:", error);
     } finally {
       setIsLoading(false);
       setTimeout(() => {
         onOpenChange(false);
-      }, 2000);
+      }, 1500);
     }
   };
 
@@ -333,7 +412,6 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
   }
 
   return (
-    <ToastProvider>
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[638px] max-sm:w-[300px]">
         <DialogHeader>
@@ -346,14 +424,15 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
           {renderStepContent()}
         </div>
         <DialogFooter>
-          {step > 3 && step !== 5 ? <Button variant="outline" onClick={handleSkip}>Skip</Button> : step > 1 && step < 6 && <Button variant="outline" onClick={handleBack}>Back</Button>}
-          <Button onClick={handleNext} disabled={isLoading} className='bg-[#03CF79]'>
+          {step > 3 && step !== 5 ? <Button variant="outline" disabled={isSkipped} onClick={handleSkip}>Skip</Button> : step > 1 && step < 6 && <Button variant="outline" onClick={handleBack}>Back</Button>}
+          <Button onClick={() => {
+            step > 4 ? handleAddAdmin() : step > 1 && step === 4 ? handleProceedWithAdmin() : handleNext()
+          }} disabled={isLoading} className='bg-[#03CF79]'>
             {isLoading ? "Loading..." : step < 4 ? "Next" : step === 4 ? "Proceed" : "Add admin"}
           </Button>
         </DialogFooter>
       </DialogContent>
+      <Toaster />
     </Dialog>
-    <Toast />
-    </ToastProvider>
   )
 }
