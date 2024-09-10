@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRef } from "react";
+import { createPortal } from 'react-dom';
 import NavBar from "../components/NavBar";
 import SideBar from "../components/SideBar";
 import ChannelSection from "./dashboard/channel/ChannelSection";
 import ManageAdmins from "./dashboard/admins/ManageAdmins";
 import HomeSection from "../components/HomeSection";
 import Greeting from "../components/Greeting";
+import CreateChannelModal from "@/components/modals/channels/channel-creation-modal";
+import { Dialog } from "@/components/ui/dialog";
 
 const PageLayout: React.FC = () => {
+    const [isOpen, setIsOpen] = useState(false)
   const mainRef = useRef<HTMLDivElement>(null);
   const sidebarMenuRef = useRef<HTMLDivElement>(null);
   const sidebarOverlayRef = useRef<HTMLDivElement>(null);
@@ -52,7 +56,7 @@ const PageLayout: React.FC = () => {
             <div className="w-full flex justify-between">
                 <Greeting/>
 
-                <p className="w-[169px] h-[36px] -mt-2 flex items-center justify-center bg-[#03CF79] text-white cursor-pointer">
+                <p className="w-[169px] h-[36px] -mt-2 flex items-center justify-center bg-[#03CF79] text-white cursor-pointer" onClick={() => setIsOpen(true)}>
                     Add channel
                 </p>
             </div>
@@ -64,6 +68,10 @@ const PageLayout: React.FC = () => {
           <ChannelSection />
         </div>
       </main>
+        {createPortal(
+            <CreateChannelModal open={isOpen} onOpenChange={setIsOpen} />,
+            document.body
+        )}
     </div>
   );
 };

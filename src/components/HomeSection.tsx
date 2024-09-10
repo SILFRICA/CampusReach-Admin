@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import Card from "./cards/Card";
-import ArrDownIcon from "../assets/Arrow drop down.svg";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface PostStats {
   all: number;
@@ -14,9 +14,8 @@ const HomeSection: React.FC = () => {
   const amountOfPost: PostStats = userData.post_stats;
   const [postStat, setPostStat] = useState<number>(amountOfPost.all);
 
-  const handlePostAmountFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const index = e.target.value as keyof PostStats;
-    setPostStat(amountOfPost[index]);
+  const handlePostAmountFilter = (value: keyof PostStats) => {
+    setPostStat(amountOfPost[value]);
   };
 
   const handleAmountOfChannels = (arr1: number[], arr2: number[]): number => {
@@ -41,19 +40,19 @@ const HomeSection: React.FC = () => {
           title="Posts created"
           children={
             <>
-              <select
-                id="postStat"
-                defaultValue={postStat}
-                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
-                onChange={(e) => handlePostAmountFilter(e)}
-              >
-                <option value="all">All</option>
-                <option value="last_7_days">Last 7 days</option>
-                <option value="last_30_days">Last 30 days</option>
-              </select>{" "}
-              <label htmlFor="postStat" className="cursor-pointer">
-                <img src={ArrDownIcon} alt="arrDownIcon" />
-              </label>
+              <Select
+                name="post_stat"
+                onValueChange={handlePostAmountFilter}
+                >
+                <SelectTrigger className="w-fit text-black font-medium text-xs focus:outline-none focus:ring-0 focus:ring-ring focus:ring-offset-0 appearance-none bg-transparent border-none focus:border-none focus-within:border-none focus-visible:none" >
+                  <SelectValue placeholder="All"/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="last_7_days">Last 7 days</SelectItem>
+                  <SelectItem value="last_30_days">Last 30 days</SelectItem>
+                </SelectContent>
+              </Select>
             </>
           }
         />
@@ -63,17 +62,18 @@ const HomeSection: React.FC = () => {
           title="Active channels"
           children={
             <>
-              <select
-                className="cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
-                id="channels"
-              >
-                <option value="all">All</option>
-                <option value="7">Last 7 days</option>
-                <option value="30">Last 30 days</option>
-              </select>{" "}
-              <label htmlFor="channels" className="cursor-pointer">
-                <img src={ArrDownIcon} alt="arrDownIcon" />
-              </label>
+              <Select
+                name="channel_activities"
+                >
+                <SelectTrigger className="w-fit text-black font-medium text-xs focus:outline-none focus:ring-0 focus:ring-ring focus:ring-offset-0 appearance-none bg-transparent border-none focus:border-none focus-within:border-none focus-visible:none" >
+                  <SelectValue placeholder="All"/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="7">Last 7 days</SelectItem>
+                  <SelectItem value="30">Last 30 days</SelectItem>
+                </SelectContent>
+              </Select>
             </>
           }
         />
@@ -83,17 +83,18 @@ const HomeSection: React.FC = () => {
           title="Campus Population"
           children={
             <>
-              <select
-                className="w-4 cursor-pointer text-black font-medium text-xs appearance-none bg-transparent"
-                id="campus"
-              >
-                <option value="all">All</option>
-                <option value="7">Students</option>
-                <option value="30">Non-students</option>
-              </select>
-              <label htmlFor="campus" className="cursor-pointer">
-                <img src={ArrDownIcon} alt="arrDownIcon" />
-              </label>
+              <Select
+                name="campus"
+                >
+                <SelectTrigger className="w-fit text-black font-medium text-xs focus:outline-none focus:ring-0 focus:ring-ring focus:ring-offset-0 appearance-none bg-transparent border-none focus:border-none focus-within:border-none focus-visible:none" >
+                  <SelectValue placeholder="All"/>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="non">Non-student</SelectItem>
+                </SelectContent>
+              </Select>
             </>
           }
         />
