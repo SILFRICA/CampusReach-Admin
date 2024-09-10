@@ -424,7 +424,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
           {renderStepContent()}
         </div>
         <DialogFooter>
-          {step > 3 && step !== 5 ? <Button variant="outline" disabled={isSkipped} onClick={handleSkip}>Skip</Button> : step > 1 && step < 6 && <Button variant="outline" onClick={handleBack}>Back</Button>}
+          {step > 3 && step !== 5 ? <Button variant="outline" disabled={isSkipped} onClick={handleSkip}>Skip</Button> : step > 1 && step < 6 && <Button variant="outline" disabled={isSkipped} onClick={handleBack}>Back</Button>}
           <Button onClick={() => {
             step > 4 ? handleAddAdmin() : step > 1 && step === 4 ? handleProceedWithAdmin() : handleNext()
           }} disabled={isLoading} className='bg-[#03CF79]'>
