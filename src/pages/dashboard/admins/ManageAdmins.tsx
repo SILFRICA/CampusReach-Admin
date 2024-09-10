@@ -11,6 +11,12 @@ import {
 } from "./AdminsChannelsTypes";
 import AdminTable from "../../../components/tables/AdminTable";
 import DeleteModal from "../../../components/modals/actionPrompts/DeleteModal";
+import axios from "axios";
+import apiUrl from "../../../data/axios";
+
+interface SuspendChannelResponse {
+  status: number;
+}
 
 const ManageAdmins: React.FC = () => {
   const { userData } = useContext(AuthContext);
@@ -19,6 +25,7 @@ const ManageAdmins: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [activeModalData, setActiveModalData] = useState<number | string>("");
+  const API_URL = apiUrl("production");
 
   const openDeleteModal = (data: number) => {
     setActiveModalData(data);
@@ -130,34 +137,88 @@ const ManageAdmins: React.FC = () => {
     setCurrentPage(1); // Reset to the first page whenever the category changes
   };
 
-  const resendInvite = (
+  const resendInvite = async (
     email: string,
     channelId: number | null,
-    subChannelId: number | null,
+    subChannelId: number | null
   ) => {
-    // Resend invite logic
-    console.log(
-      `Resending invite to ${email} for channel ${channelId} and sub-channel ${subChannelId}`,
-    );
+    try {
+      const response = await axios.post(`${API_URL}/api/admin/resend-invite`, {
+        email,
+        channelId,
+        subChannelId,
+      });
+      if (response.status === 200) {
+        alert(`Invite resent to ${email}.`);
+      } else {
+        alert(`Failed to resend invite to ${email}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while resending invite to ${email}.`);
+    }
+  };
+  
+// to suspend subchannel or not
+  const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
+    try {
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+        user_id,           // Include user_id
+        sub_channel_id,    // Include sub_channel_id
+      }, { headers: {
+        'Authorization': `Bearer ${userData.token}`
+      }});
+  
+      if (response.status === 200) {
+        alert("The channel has been suspended.");
+        // Refresh data if necessary
+      } else {
+        alert("Failed to suspend channel");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while suspending channel");
+    }
   };
 
-  const handleSuspendAdmin = (adminEmail: string) => {
-    console.log(`Suspending admin: ${adminEmail}`);
-    // Implement the suspend logic here
+  const handleUnsuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
+    try {
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+        user_id,           // Include user_id
+        sub_channel_id,    // Include sub_channel_id
+      }, { headers: {
+        'Authorization': `Bearer ${userData.token}`
+      }});
+  
+      if (response.status === 200) {
+        alert("The channel has been suspended.");
+        // Refresh data if necessary
+      } else {
+        alert("Failed to suspend channel");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("An error occurred while suspending channel");
+    }
   };
 
-  const handleUnsuspendAdmin = (adminEmail: string) => {
-    console.log(`Unsuspending admin: ${adminEmail}`);
-    // Implement the unsuspend logic here
-  };
-
-  const handleDelete = (channelId: number | string) => {
-    console.log(`Deleting this ${channelId}`);
-    alert(`Deleted this ${channelId}`);
+  const handleDelete = async (channelId: number | string) => {
+    try {
+      const response = await axios.delete(`${API_URL}/api/channel/${channelId}`);
+      if (response.status === 200) {
+        alert(`Deleted channel ${channelId} successfully.`);
+        // You can refresh data here to update the UI after deletion
+      } else {
+        alert(`Failed to delete channel ${channelId}.`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert(`An error occurred while deleting channel ${channelId}.`);
+    }
   };
 
   const handleMessage = (email: string) => {
-    console.log(`Messaging this admin: ${email}`);
+    window.location.href = `mailto:${email}`;
   };
 
   return (
@@ -253,7 +314,7 @@ const ManageAdmins: React.FC = () => {
                             <button
                               onClick={
                                 isSuspended
-                                  ? () => handleUnsuspendAdmin(admin.email)
+                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id])
                                   : () => handleMessage(admin.email)
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
@@ -261,16 +322,28 @@ const ManageAdmins: React.FC = () => {
                               {isSuspended ? "Unsuspend" : "Message"}
                             </button>
                             <span className="mr-1" />
+                            {
+                              isSuspended && (
                             <button
                               onClick={
-                                isSuspended
-                                  ? () => handleSuspendAdmin(admin.email)
-                                  : () => openDeleteModal(admin.sub_channel_id)
+                                () => handleSuspendChannel([admin.id, admin.sub_channel_id])
                               }
-                              className={`p-1 w-[90px] ${!isSuspended ? "bg-[#FF2055] cursor-not-allowed" : "bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2"} text-black`}
+                              className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
-                              {!isSuspended ? "Suspend" : "Delete"}
+                              Suspend
                             </button>
+                              )
+                            }
+                            { !isSuspended && (
+                            <button
+                              onClick={
+                                  () => openDeleteModal(admin.sub_channel_id)
+                              }
+                              className="p-1 w-[90px] bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
+                            >
+                              Delete
+                            </button>)
+                }
                           </>
                         )}
                       </td>
@@ -328,10 +401,10 @@ const ManageAdmins: React.FC = () => {
         onClose={closeDeleteModal}
         children={
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-black mb-4">
+            <h1 className="text-lg md:text-2xl font-semibold text-black mb-4">
               Delete this Channel?
             </h1>
-            <p className="font-medium text-sm text-black mb-8">
+            <p className="text-xs w-full font-medium sm:text-sm text-black mb-8">
               Deleting this channel would delete all administrative access &
               corresponding data
             </p>
