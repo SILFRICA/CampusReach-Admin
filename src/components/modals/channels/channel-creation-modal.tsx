@@ -64,6 +64,8 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
   const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
+  const typeDesc = ['Information from this channel would be accessible to all users on the platform. Suitable for communicating with the general campus community or specific subsets.', 'Information from this channel would be accessible to only users granted access on the platform. Suitable for communication between staffs, heads of department and selected individuals.'];
+
   useEffect(() => {
     if (!open) {
       setStep(1)
@@ -163,10 +165,10 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
         return (
           <RadioGroup
             defaultValue={formData.type}
-            onValueChange={(value: "public" | "private") => setFormData(prev => ({ ...prev, channelType: value }))}
+            onValueChange={(value: "public" | "private") => setFormData(prev => ({ ...prev, type: value }))}
             className="space-y-4"
           >
-            {["public", "private"].map((type) => (
+            {["public", "private"].map((type, index) => (
               <div
                 key={type}
                 className={cn(
@@ -183,9 +185,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
                   >
                     {type}
                   <p className="text-xs sm:text-sm text-gray-500">
-                    Information from this channel would be accessible to all users on
-                    the platform. Suitable for communicating with the general
-                    campus community or specific subsets.
+                    {typeDesc[index]}
                   </p>
                   </Label>
                 </div>
