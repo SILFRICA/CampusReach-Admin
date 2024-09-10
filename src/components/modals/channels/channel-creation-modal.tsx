@@ -12,13 +12,13 @@ import { useToast } from "@/hooks/use-toast"
 import { Toast, ToastProvider } from "@/components/ui/toast"
 
 interface FormData {
-  channelType: "public" | "private";
+  type: "public" | "private";
   name: string;
   description: string;
   category: string;
-  primaryAudience: string;
-  website: string;
-  primaryCampus: string;
+  targetAudience: string;
+  subchannelWebsite: string;
+  profileImage: undefined | File;
   adminPermissions: {
     createPosts: boolean;
     receiveEmailEnquiries: boolean;
@@ -34,17 +34,23 @@ interface CreateChannelModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
   }
-
+// 'name' => 'required|string|max:150',
+//                 'profileImage' => 'nullable|image|max:5120',
+//                 'type' => 'required|string',
+//                 'description' => 'required|string|max:160',
+//                 'category' => 'required|string',
+//                 'targetAudience' => 'required|string',
+//                 'subchannelWebsite' => 'nullable|string',
 export default function CreateChannelModal({ open, onOpenChange }: CreateChannelModalProps) {
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
-    channelType: "public",
+    type: "public",
     name: "",
     description: "",
     category: "",
-    primaryAudience: "",
-    website: "",
-    primaryCampus: "",
+    targetAudience: "",
+    subchannelWebsite: "",
+    profileImage: undefined,
     adminPermissions: {
       createPosts: true,
       receiveEmailEnquiries: true,
@@ -62,13 +68,13 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     if (!open) {
       setStep(1)
       setFormData({
-        channelType: "public",
+        type: "public",
         name: "",
         description: "",
         category: "",
-        primaryAudience: "",
-        website: "",
-        primaryCampus: "",
+        targetAudience: "",
+        subchannelWebsite: "",
+        profileImage: undefined,
         adminPermissions: {
           createPosts: true,
           receiveEmailEnquiries: true,
@@ -86,16 +92,6 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
-
-//   const handleCheckboxChange = (permission: keyof FormData['adminPermissions']) => {
-//     setFormData(prev => ({
-//       ...prev,
-//       adminPermissions: {
-//         ...prev.adminPermissions,
-//         [permission]: !prev.adminPermissions[permission]
-//       }
-//     }))
-//   }
 
   const handleNext = () => {
     if (step < 5) {
@@ -166,7 +162,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
       case 1:
         return (
           <RadioGroup
-            defaultValue={formData.channelType}
+            defaultValue={formData.type}
             onValueChange={(value: "public" | "private") => setFormData(prev => ({ ...prev, channelType: value }))}
             className="space-y-4"
           >
@@ -175,7 +171,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
                 key={type}
                 className={cn(
                   "flex items-center justify-between rounded-lg border p-4",
-                  formData.channelType === type
+                  formData.type === type
                     ? "border-[#03CF79] bg-[#DDF6EC]"
                     : "border-gray-200"
                 )}
@@ -243,7 +239,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
           <div className="space-y-4">
             <div>
               <Label htmlFor="primaryAudience">Primary audience</Label>
-              <Select name="primaryAudience" onValueChange={(value) => setFormData(prev => ({ ...prev, primaryAudience: value }))}>
+              <Select name="targetAudience" onValueChange={(value) => setFormData(prev => ({ ...prev, primaryAudience: value }))}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tap to select category" />
                 </SelectTrigger>
@@ -256,7 +252,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
             </div>
             <div>
               <Label htmlFor="website">Website</Label>
-              <Input id="website" name="website" value={formData.website} onChange={handleInputChange} placeholder="https://" />
+              <Input id="website" name="subchannelWebsite" value={formData.subchannelWebsite} onChange={handleInputChange} placeholder="https://" />
             </div>
             {/* <div>
               <Label htmlFor="primaryCampus">Primary campus</Label>
