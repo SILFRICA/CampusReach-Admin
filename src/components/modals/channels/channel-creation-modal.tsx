@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { cn } from "@/lib/utils"
 import { useToast } from "@/hooks/use-toast"
 import { Toast, ToastProvider } from "@/components/ui/toast"
+import { AuthContext } from '@/context/AuthContext'
 
 interface FormData {
   type: "public" | "private";
@@ -33,15 +34,10 @@ interface FormData {
 interface CreateChannelModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-  }
-// 'name' => 'required|string|max:150',
-//                 'profileImage' => 'nullable|image|max:5120',
-//                 'type' => 'required|string',
-//                 'description' => 'required|string|max:160',
-//                 'category' => 'required|string',
-//                 'targetAudience' => 'required|string',
-//                 'subchannelWebsite' => 'nullable|string',
+}
+
 export default function CreateChannelModal({ open, onOpenChange }: CreateChannelModalProps) {
+    const {userData} = useContext(AuthContext)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
     type: "public",
@@ -115,49 +111,59 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     }
   }
 
-//   'user_id' => 'required|exists:users,id',
-//                 'channel_id' => 'required|exists:channels,id',
-//                 'name' => 'required|string|max:150',
-//                 'profileImage' => 'nullable|image|max:5120',
-//                 'type' => 'required|string',
-//                 'description' => 'required|string|max:160',
-//                 'category' => 'required|string',
-//                 'targetAudience' => 'required|string',
-//                 'subchannelWebsite' => 'nullable|string',
   const handleSubmit = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
+
+    // Prepare form data
+    const form = new FormData();
+    form.append('user_id', userData.user.id);  // Add user_id
+    form.append('channel_id', userData.channels_managed[0]);  // Add channel_id
+    form.append('name', formData.name);
+    form.append('description', formData.description);
+    form.append('category', formData.category);
+    form.append('targetAudience', formData.targetAudience);
+    if (formData.subchannelWebsite) {
+      form.append('subchannelWebsite', formData.subchannelWebsite);
+    }
+    if (formData.profileImage) {
+      form.append('profileImage', formData.profileImage);
+    }
+    form.append('type', formData.type);
+
     try {
       const response = await fetch('https://test-api.silfrica.com/api/subchannel', {
         method: 'POST',
         headers: {
-            'Accept': 'application/json',
-          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json',
+          // No need for 'Content-Type' here, fetch automatically sets it for FormData
         },
-        body: JSON.stringify(formData),
-      })
+        body: form,
+      });
 
       if (!response.ok) {
-        throw new Error('Failed to create channel')
+        throw new Error('Failed to create channel');
       }
 
-      await response.json()
+      const channel = await response.json();
+      console.log(channel);
       toast({
         title: "Success",
         description: "Channel created successfully!",
-      })
-      onOpenChange(false)
+      });
     } catch (error) {
-      console.error('Error creating channel:', error)
+      console.error('Error creating channel:', error);
       toast({
         title: "Error",
         description: "Failed to create channel. Please try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
-      onOpenChange(false)
+      setIsLoading(false);
+      setTimeout(() => {
+        onOpenChange(false);
+      }, 2000);
     }
-  }
+  };
 
   const renderStepContent = () => {
     switch(step) {
