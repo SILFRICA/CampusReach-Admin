@@ -12,6 +12,7 @@ import toast, {Toaster} from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
 import apiUrl from '@/data/axios'
 import axios from 'axios'
+import { HomeDataResponse } from '@/components/pages/dashboard/home/response'
 
 interface FormData {
   type: "public" | "private";
@@ -35,6 +36,7 @@ interface FormData {
 interface CreateChannelModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    data: HomeDataResponse;
 }
 
 interface ChannelCreatedResponse {
@@ -46,7 +48,7 @@ interface ChannelCreatedResponse {
     description: string;
 }
 
-export default function CreateChannelModal({ open, onOpenChange }: CreateChannelModalProps) {
+export default function CreateChannelModal({ open, onOpenChange, data }: CreateChannelModalProps) {
     const {userData} = useContext(AuthContext)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
@@ -71,7 +73,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
   const [isSkipped, setIsSkipped] = useState(false)
   const [isResponse, setIsResponse] = useState<ChannelCreatedResponse>({
     id: "",
-    channel_id: userData.channel_managed[0],
+    channel_id: "",
     admin_id: userData.user.id,
     name: "",
     type: "",
@@ -139,11 +141,20 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    let ch_id = '';
+    if (data.channels_managed !== null){
+        data.channels_managed.forEach((id, index) => {
+            if (index === 0) {
+                ch_id = id.toString()
+            }
+            return;
+        });
+    }
 
     // Prepare form data
     const form = new FormData();
     form.append('user_id', userData.user.id);  // Add user_id
-    form.append('channel_id', userData.channel_managed[0]);  // Add channel_id
+    form.append('channel_id', ch_id);  // Add channel_id
     form.append('name', formData.name);
     form.append('description', formData.description);
     form.append('category', formData.category);
