@@ -87,7 +87,7 @@ const HomePage: React.FC = () => {
       )}
       <ChannelSection />
         {createPortal(
-        <CreateChannelModal open={isOpen} onOpenChange={setIsOpen} />,
+        <CreateChannelModal open={isOpen} data={} onOpenChange={setIsOpen} />,
         document.body
     )}
     </div>

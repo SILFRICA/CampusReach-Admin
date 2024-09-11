@@ -12,9 +12,10 @@ import toast, {Toaster} from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
 import apiUrl from '@/data/axios'
 import axios from 'axios'
+import { HomeDataResponse } from '@/components/pages/dashboard/home/response'
 
 interface FormData {
-  type: "public" | "private";
+  type: "Public" | "Private";
   name: string;
   description: string;
   category: string;
@@ -35,6 +36,7 @@ interface FormData {
 interface CreateChannelModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    data: HomeDataResponse;
 }
 
 interface ChannelCreatedResponse {
@@ -46,11 +48,11 @@ interface ChannelCreatedResponse {
     description: string;
 }
 
-export default function CreateChannelModal({ open, onOpenChange }: CreateChannelModalProps) {
+export default function CreateChannelModal({ open, onOpenChange, data }: CreateChannelModalProps) {
     const {userData} = useContext(AuthContext)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
-    type: "public",
+    type: "Public",
     name: "",
     description: "",
     category: "",
@@ -71,7 +73,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
   const [isSkipped, setIsSkipped] = useState(false)
   const [isResponse, setIsResponse] = useState<ChannelCreatedResponse>({
     id: "",
-    channel_id: userData.channel_managed[0],
+    channel_id: "",
     admin_id: userData.user.id,
     name: "",
     type: "",
@@ -84,7 +86,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
     if (!open) {
       setStep(1)
       setFormData({
-        type: "public",
+        type: "Public",
         name: "",
         description: "",
         category: "",
@@ -139,11 +141,20 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
 
   const handleSubmit = async () => {
     setIsLoading(true);
+    let ch_id = '';
+    if (data.channels_managed !== null){
+        data.channels_managed.forEach((id, index) => {
+            if (index === 0) {
+                ch_id = id.toString()
+            }
+            return;
+        });
+    }
 
     // Prepare form data
     const form = new FormData();
     form.append('user_id', userData.user.id);  // Add user_id
-    form.append('channel_id', userData.channel_managed[0]);  // Add channel_id
+    form.append('channel_id', ch_id);  // Add channel_id
     form.append('name', formData.name);
     form.append('description', formData.description);
     form.append('category', formData.category);
@@ -271,7 +282,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
         return (
           <RadioGroup
             defaultValue={formData.type}
-            onValueChange={(value: "public" | "private") => setFormData(prev => ({ ...prev, type: value }))}
+            onValueChange={(value: "Public" | "Private") => setFormData(prev => ({ ...prev, type: value }))}
             className="space-y-4"
           >
             {["public", "private"].map((type, index) => (
@@ -329,12 +340,12 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
                   <SelectValue placeholder="Tap to select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="administration">Administration</SelectItem>
-                  <SelectItem value="faculty">Faculty</SelectItem>
-                  <SelectItem value="department">Department</SelectItem>
-                  <SelectItem value="school official">School Official</SelectItem>
-                  <SelectItem value="association">Association</SelectItem>
-                  <SelectItem value="school partner">School Partner</SelectItem>
+                  <SelectItem value="Administration">Administration</SelectItem>
+                  <SelectItem value="Faculty">Faculty</SelectItem>
+                  <SelectItem value="Department">Department</SelectItem>
+                  <SelectItem value="School Official">School Official</SelectItem>
+                  <SelectItem value="Association">Association</SelectItem>
+                  <SelectItem value="School Partner">School Partner</SelectItem>
                 </SelectContent>
               </Select>
             </div>
