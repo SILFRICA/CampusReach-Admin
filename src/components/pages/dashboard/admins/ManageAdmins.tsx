@@ -13,12 +13,17 @@ import AdminTable from "@/components/tables/AdminTable";
 import DeleteModal from "@/components/modals/actionPrompts/DeleteModal";
 import axios from "axios";
 import apiUrl from "@/data/axios";
+import { HomeDataResponse } from "../home/response";
 
 interface SuspendChannelResponse {
   status: number;
 }
 
-const ManageAdmins: React.FC = () => {
+interface HomeDataType {
+    data: HomeDataResponse;
+}
+
+const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
   const { userData } = useContext(AuthContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,9 +46,9 @@ const ManageAdmins: React.FC = () => {
   const itemsPerPage = 5; // Number of items to show per page
 
   // Flatten channels and sub_channels
-  const AdminsData: ChannelTable[] = userData.sub_admins.map(
+  const AdminsData: ChannelTable[] = data.sub_admins.map(
     (admin: AdminProps) => ({
-      admin_id: admin.id,
+      admin_id: Number(admin.id),
       email: admin.email,
       channels: [
         ...admin.channels.map((channel: Channel) => ({
@@ -62,7 +67,7 @@ const ManageAdmins: React.FC = () => {
   );
 
   // Add pending admins to the flattened data
-  const pendingAdmins: PendingAdmin[] = userData.pending_admins;
+  const pendingAdmins: PendingAdmin[] = data.pending_admins;
 
   const isPendingAdmin = (
     c_id: number | null,
@@ -162,7 +167,7 @@ const ManageAdmins: React.FC = () => {
 // to suspend subchannel or not
   const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
     try {
-      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchannel/suspension`, {
         user_id,           // Include user_id
         sub_channel_id,    // Include sub_channel_id
       }, { headers: {
@@ -183,7 +188,7 @@ const ManageAdmins: React.FC = () => {
 
   const handleUnsuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
     try {
-      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchanne/suspension`, {
+      const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchannel/suspension`, {
         user_id,           // Include user_id
         sub_channel_id,    // Include sub_channel_id
       }, { headers: {
