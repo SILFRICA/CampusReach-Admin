@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import icon1 from "../../assets/information.fb3bdf82be8bafd38b453f4ba84198a8.svg";
-import icon2 from "../../assets/Valuable-data.dca55fd936a5650375c481775d1fb1d8.svg";
-import icon4 from "../../assets/monitor.857de4ab222ac055f3b3465b95342488.svg";
+import icon1 from "@/assets/information.fb3bdf82be8bafd38b453f4ba84198a8.svg";
+import icon2 from "@/assets/Valuable-data.dca55fd936a5650375c481775d1fb1d8.svg";
+import icon4 from "@/assets/monitor.857de4ab222ac055f3b3465b95342488.svg";
 
-const HomePage: React.FC = () => {
+const LandingPage: React.FC = () => {
   return (
     <section className="bg-gray-900 text-white min-h-screen">
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
@@ -83,4 +83,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default LandingPage;

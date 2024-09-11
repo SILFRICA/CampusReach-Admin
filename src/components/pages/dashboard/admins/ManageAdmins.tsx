@@ -1,5 +1,5 @@
 import React, { useState, useContext, ChangeEvent } from "react";
-import { AuthContext } from "../../../context/AuthContext";
+import { AuthContext } from "@/context/AuthContext";
 import {
   ChannelTable,
   AdminData,
@@ -8,11 +8,11 @@ import {
   Channel,
   SubChannel,
   Channels,
-} from "./AdminsChannelsTypes";
-import AdminTable from "../../../components/tables/AdminTable";
-import DeleteModal from "../../../components/modals/actionPrompts/DeleteModal";
+} from './AdminsChannelsTypes';
+import AdminTable from "@/components/tables/AdminTable";
+import DeleteModal from "@/components/modals/actionPrompts/DeleteModal";
 import axios from "axios";
-import apiUrl from "../../../data/axios";
+import apiUrl from "@/data/axios";
 
 interface SuspendChannelResponse {
   status: number;
@@ -158,7 +158,7 @@ const ManageAdmins: React.FC = () => {
       alert(`An error occurred while resending invite to ${email}.`);
     }
   };
-  
+
 // to suspend subchannel or not
   const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
     try {
@@ -168,7 +168,7 @@ const ManageAdmins: React.FC = () => {
       }, { headers: {
         'Authorization': `Bearer ${userData.token}`
       }});
-  
+
       if (response.status === 200) {
         alert("The channel has been suspended.");
         // Refresh data if necessary
@@ -189,7 +189,7 @@ const ManageAdmins: React.FC = () => {
       }, { headers: {
         'Authorization': `Bearer ${userData.token}`
       }});
-  
+
       if (response.status === 200) {
         alert("The channel has been suspended.");
         // Refresh data if necessary
@@ -326,22 +326,22 @@ const ManageAdmins: React.FC = () => {
                               isSuspended && (
                             <button
                               onClick={
-                                () => handleSuspendChannel([admin.id, admin.sub_channel_id])
+                                () => openDeleteModal(admin.sub_channel_id)
                               }
                               className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
-                              Suspend
+                              Delete
                             </button>
                               )
                             }
                             { !isSuspended && (
                             <button
                               onClick={
-                                  () => openDeleteModal(admin.sub_channel_id)
+                                  () => handleSuspendChannel([admin.id, admin.sub_channel_id])
                               }
                               className="p-1 w-[90px] bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
-                              Delete
+                              Suspend
                             </button>)
                 }
                           </>

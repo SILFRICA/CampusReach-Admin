@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import axios from "axios";
-import { AuthContext } from "../../../context/AuthContext";
-import apiUrl from "../../../data/axios";
+import { AuthContext } from "@/context/AuthContext";
+import apiUrl from "@/data/axios";
 
 const ChannelSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState("excel");

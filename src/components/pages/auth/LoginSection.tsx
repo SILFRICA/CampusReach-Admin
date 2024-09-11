@@ -1,10 +1,10 @@
 import React, { FormEvent, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../context/AuthContext";
-import Spinner from "../../components/Spinner";
-import apiUrl from "../../data/axios";
+import { AuthContext } from "@/context/AuthContext";
+import Spinner from "@/components/Spinner";
+import apiUrl from "@/data/axios";
 import axios from "axios";
-import Logo from "../../assets/campusreachlogo.svg";
+import Logo from "@/assets/campusreachlogo.svg";
 
 const LoginSection: React.FC = () => {
   const { login } = useContext(AuthContext);
