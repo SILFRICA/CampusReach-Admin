@@ -3,13 +3,13 @@ export interface AdminData {
     email: string;
     name: string;
     category: string;
-    channel_id: number;
-    sub_channel_id: number;
+    channel_id: number | null;
+    sub_channel_id: number | null; // Allow null for main channels
     suspended_admins: null|number[];
 }
 
 export interface ChannelTable {
-    admin_id: string | number;
+    admin_id: number;
     email: string;
     channels: Channels[];
 }
@@ -32,14 +32,22 @@ export interface Channel {
     pending_admins: null|number[];
     removed_admins: null|number[];
 }
-
-export interface Channels {
+export interface ChannelWithMainId {
     channel_id: number;
+    name: string;
+    category: string;
+    suspended_admins: null | number[];
+}
+
+export interface ChannelWithSubId {
     sub_channel_id: number;
     name: string;
     category: string;
-    suspended_admins: null|number[];
+    suspended_admins: null | number[];
 }
+
+// Define Channels as a union of the two possible structures
+export type Channels = ChannelWithMainId | ChannelWithSubId;
 
 export interface SubChannel {
     id: number;
@@ -59,7 +67,7 @@ export interface SubChannel {
 }
 
 export interface AdminProps {
-  id: number|string;
+  id: number;
   firstname: string;
   lastname: string;
   email: string;

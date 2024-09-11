@@ -7,7 +7,6 @@ import {
   PendingAdmin,
   Channel,
   SubChannel,
-  Channels,
 } from './AdminsChannelsTypes';
 import AdminTable from "@/components/tables/AdminTable";
 import DeleteModal from "@/components/modals/actionPrompts/DeleteModal";
@@ -46,59 +45,68 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
   const itemsPerPage = 5; // Number of items to show per page
 
   // Flatten channels and sub_channels
-  const AdminsData: ChannelTable[] = data.sub_admins.map(
-    (admin: AdminProps) => ({
-      admin_id: Number(admin.id),
-      email: admin.email,
-      channels: [
-        ...admin.channels.map((channel: Channel) => ({
-          channel_id: channel.id,
-          name: channel.name,
-          category: channel.type,
-          suspended_admins: channel.suspended_admins,
-        })),
-        ...admin.sub_channels.map((subChannel: SubChannel) => ({
-          sub_channel_id: subChannel.id,
-          name: subChannel.name,
-          category: subChannel.category,
-        })),
-      ],
-    }),
-  );
+const AdminsData: ChannelTable[] = data.sub_admins.map((admin: AdminProps) => ({
+    admin_id: admin.id,
+    email: admin.email,
+    channels: [
+      // Flatten the main channels
+      ...admin.channels.map((channel: Channel) => ({
+        channel_id: channel.id,
+        name: channel.name,
+        category: channel.type,
+        suspended_admins: channel.suspended_admins,
+      })),
+      // Flatten the sub-channels
+      ...admin.sub_channels.map((subChannel: SubChannel) => ({
+        sub_channel_id: subChannel.id,
+        name: subChannel.name,
+        category: subChannel.category,
+        suspended_admins: null, // No suspended_admins for sub-channels
+      })),
+    ],
+  }));
 
   // Add pending admins to the flattened data
   const pendingAdmins: PendingAdmin[] = data.pending_admins;
 
-  const isPendingAdmin = (
-    c_id: number | null,
-    sc_id: number | null,
-  ): boolean => {
-    let pendingExist = false;
-    pendingAdmins.forEach((pending) => {
-      if (
-        pending.sub_channel_id == sc_id &&
+  // Function to check if a pending admin exists
+  const isPendingAdmin = (c_id: number | null, sc_id: number | null): boolean => {
+    return pendingAdmins.some(
+      (pending) =>
+        pending.sub_channel_id === sc_id &&
         pending.email !== null &&
         pending.channel_id !== c_id
-      ) {
-        pendingExist = true;
-        return pendingExist;
-      }
-    });
-
-    return pendingExist;
+    );
   };
 
   // Flattened data for table display
-  const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
-    admin.channels.map((channel: Channels) => ({
-      channel_id: channel.channel_id,
-      sub_channel_id: channel.sub_channel_id,
-      email: admin.email,
-      name: channel.name,
-      category: channel.category,
-      suspended_admins: channel.suspended_admins,
-      id: admin.admin_id,
-    })),
+const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
+    admin.channels.map((channel) => {
+      // Check whether the channel is a main channel or a sub-channel
+      if ('channel_id' in channel) {
+        return {
+          channel_id: channel.channel_id!,
+          sub_channel_id: null,
+          email: admin.email,
+          name: channel.name,
+          category: channel.category,
+          suspended_admins: channel.suspended_admins || null,
+          id: admin.admin_id,
+        };
+      } else if ('sub_channel_id' in channel) {
+        return {
+          channel_id: null,
+          sub_channel_id: channel.sub_channel_id!,
+          email: admin.email,
+          name: channel.name,
+          category: channel.category,
+          suspended_admins: null, // Sub-channels do not have suspended_admins
+          id: admin.admin_id,
+        };
+      } else {
+        throw new Error("Invalid channel type");
+      }
+    })
   );
 
   // Filter data based on the search query and selected category
@@ -305,7 +313,7 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
                             {/*btn to delete channel that has pending admin*/}
                             <button
                               onClick={() =>
-                                openDeleteModal(admin.sub_channel_id)
+                                openDeleteModal(admin.sub_channel_id ?? 0)
                               }
                               className="p-1 w-[90px] bg-[#FF2055] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
@@ -319,7 +327,7 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
                             <button
                               onClick={
                                 isSuspended
-                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id])
+                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id ?? 0])
                                   : () => handleMessage(admin.email)
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
@@ -331,7 +339,7 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
                               isSuspended && (
                             <button
                               onClick={
-                                () => openDeleteModal(admin.sub_channel_id)
+                                () => openDeleteModal(admin.sub_channel_id ?? 0)
                               }
                               className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
@@ -342,7 +350,7 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
                             { !isSuspended && (
                             <button
                               onClick={
-                                  () => handleSuspendChannel([admin.id, admin.sub_channel_id])
+                                  () => handleSuspendChannel([admin.id, admin.sub_channel_id ?? 0])
                               }
                               className="p-1 w-[90px] bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
