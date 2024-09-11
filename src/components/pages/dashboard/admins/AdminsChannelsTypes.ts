@@ -9,7 +9,7 @@ export interface AdminData {
 }
 
 export interface ChannelTable {
-    admin_id: number;
+    admin_id: string | number;
     email: string;
     channels: Channels[];
 }

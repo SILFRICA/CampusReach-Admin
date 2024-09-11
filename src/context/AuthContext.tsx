@@ -2,11 +2,6 @@ import React, { createContext, useEffect, useState } from 'react';
 
 interface UserDataProps {
     user: object,
-    channels_managed: null|number[],
-    subchannel_managed: null|number[],
-    post_stats: object,
-    sub_admins: [],
-    pending_admins: [],
     institution: {
         id: number,
         name: string
