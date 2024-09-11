@@ -3,6 +3,7 @@ import React, { forwardRef, useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
+import { Link } from "react-router-dom";
 // import { truncateString } from "../helpers/TruncateString";
 
 const SideBar = forwardRef<
@@ -32,13 +33,13 @@ const SideBar = forwardRef<
         {SideBarData &&
           SideBarData.name.map((nav, index) => (
             <li className="mb-1 group h-[56px] text-center" key={index}>
-              <a
-                href={nav.url}
+              <Link
+                to={nav.url}
                 className={`${activeTab === nav.title ? 'text-[#03CF79]': 'text-black'}`}
                 onClick={() => handleActiveTab(nav.title)}
               >
                 <span className="text-xl font-semibold">{nav.title}</span>
-              </a>
+              </Link>
             </li>
           ))}
       </ul>

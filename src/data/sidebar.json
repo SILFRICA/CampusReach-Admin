@@ -2,27 +2,27 @@
    "name": [
       {
          "title": "Home",
-         "url": "#home"
+         "url": "/dashboard/home"
       },
       {
          "title": "Channels",
-         "url": "#channels"
+         "url": "/dashboard/channels"
       },
       {
          "title": "Content",
-         "url": "#content"
+         "url": "/dashboard/content"
       },
       {
          "title": "Insights",
-         "url": "#insights"
+         "url": "/dashboard/insights"
       },
       {
          "title": "Alerts",
-         "url": "#alerts"
+         "url": "/dashboard/alerts"
       },
       {
          "title": "Settings",
-         "url": "#settings"
+         "url": "/dashboard/settings"
       }
    ]
 }
