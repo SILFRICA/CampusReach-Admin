@@ -61,7 +61,7 @@ export interface SubChannel {
     admin_id: number;
     admin: AdminProps;
     subchannelWebsite: null|string;
-    status: string;
+    status: boolean;
     deleted: boolean;
     primary_institution_id: number;
 }
