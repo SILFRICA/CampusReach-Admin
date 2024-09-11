@@ -327,12 +327,12 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
                   <SelectValue placeholder="Tap to select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Administration">Administration</SelectItem>
-                  <SelectItem value="Faculty">Faculty</SelectItem>
-                  <SelectItem value="Department">Department</SelectItem>
-                  <SelectItem value="School Official">School Official</SelectItem>
-                  <SelectItem value="Association">Association</SelectItem>
-                  <SelectItem value="School Partner">School Partner</SelectItem>
+                  <SelectItem value="administration">Administration</SelectItem>
+                  <SelectItem value="faculty">Faculty</SelectItem>
+                  <SelectItem value="department">Department</SelectItem>
+                  <SelectItem value="school official">School Official</SelectItem>
+                  <SelectItem value="association">Association</SelectItem>
+                  <SelectItem value="school partner">School Partner</SelectItem>
                 </SelectContent>
               </Select>
             </div>
