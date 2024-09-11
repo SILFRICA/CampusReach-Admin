@@ -31,7 +31,10 @@ const ManageAdmins: React.FC<HomeDataType> = ({ data }) => {
   const [activeModalData, setActiveModalData] = useState<number | string>("");
   const API_URL = apiUrl("production");
 
-  const openDeleteModal = (data: number) => {
+  const openDeleteModal = (data: number|null) => {
+    if (data == null) {
+        return;
+    }
     setActiveModalData(data);
     setIsDeleteModalOpen(true);
   };
@@ -173,7 +176,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
   };
 
 // to suspend subchannel or not
-  const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
+  const handleSuspendChannel = async ([user_id, sub_channel_id]: [number, number|null]): Promise<void> => {
     try {
       const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchannel/suspension`, {
         user_id,           // Include user_id
@@ -194,7 +197,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
     }
   };
 
-  const handleUnsuspendChannel = async ([user_id, sub_channel_id]: [number, number]): Promise<void> => {
+  const handleUnsuspendChannel = async ([user_id, sub_channel_id]: [number, number|null]): Promise<void> => {
     try {
       const response: SuspendChannelResponse = await axios.post(`${API_URL}/api/subchannel/suspension`, {
         user_id,           // Include user_id
@@ -313,7 +316,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
                             {/*btn to delete channel that has pending admin*/}
                             <button
                               onClick={() =>
-                                openDeleteModal(admin.sub_channel_id ?? 0)
+                                openDeleteModal(admin.sub_channel_id)
                               }
                               className="p-1 w-[90px] bg-[#FF2055] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
@@ -327,7 +330,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
                             <button
                               onClick={
                                 isSuspended
-                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id ?? 0])
+                                  ? () => handleUnsuspendChannel([admin.id, admin.sub_channel_id ])
                                   : () => handleMessage(admin.email)
                               }
                               className={`p-1 w-[90px] ${isSuspended ? "bg-[#FFA620] cursor-not-allowed text-black" : "bg-[#0948EC] text-white hover:bg-gray-100 hover:text-teal-600 transition-colors"}`}
@@ -339,7 +342,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
                               isSuspended && (
                             <button
                               onClick={
-                                () => openDeleteModal(admin.sub_channel_id ?? 0)
+                                () => openDeleteModal(admin.sub_channel_id)
                               }
                               className="p-1 w-[90px] bg-[#FF2055] cursor-not-allowed"
                             >
@@ -350,7 +353,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
                             { !isSuspended && (
                             <button
                               onClick={
-                                  () => handleSuspendChannel([admin.id, admin.sub_channel_id ?? 0])
+                                  () => handleSuspendChannel([admin.id, admin.sub_channel_id ])
                               }
                               className="p-1 w-[90px] bg-[#FFCE20] hover:bg-gray-100 hover:text-red-600 transition-colors ml-2 text-black"
                             >
