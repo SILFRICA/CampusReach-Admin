@@ -36,7 +36,7 @@ interface FormData {
 interface CreateChannelModalProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    data: HomeDataResponse;
+    data: HomeDataResponse | null;
 }
 
 interface ChannelCreatedResponse {
@@ -142,8 +142,8 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
   const handleSubmit = async () => {
     setIsLoading(true);
     let ch_id = '';
-    if (data.channels_managed !== null){
-        data.channels_managed.forEach((id, index) => {
+    if (data?.channels_managed !== null){
+        data?.channels_managed.forEach((id, index) => {
             if (index === 0) {
                 ch_id = id.toString()
             }
