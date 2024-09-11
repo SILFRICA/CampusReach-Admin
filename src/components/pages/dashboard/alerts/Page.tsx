@@ -9,6 +9,15 @@ import {
     SelectTrigger,
     SelectValue,
   } from "@/components/ui/select"
+import {
+Dialog,
+DialogContent,
+DialogDescription,
+DialogFooter,
+DialogHeader,
+DialogTitle,
+DialogTrigger,
+} from "@/components/ui/dialog"
 import { Label } from "@/components/ui/label"
 import {
   Popover,
@@ -18,17 +27,40 @@ import {
 import React, {useState} from 'react'
 import { CalendarIcon } from "lucide-react"
 import { TimePicker12Demo } from "@/components/ui/time-picker-12h-demo"
+import toast, {Toaster} from "react-hot-toast"
 
 const AlertsPage: React.FC = () => {
     const [alertType, setAlertType] = useState('General Announcement')
     const types = ['Urgent Alert', 'General Announcement', 'Security Warning'];
     const [date, setDate] = useState<Date | undefined>(new Date())
     const [audience, setAudience] = useState('students')
+    const [confirmAlertSend, setConfirmAlertSend] = useState(false)
     const handleAlertType = (type: string) => {
         setAlertType(type);
     }
     const handleAlertAudience = (value: string) => {
         setAudience(value)
+    }
+
+    const openConfirmAlert = () => {
+        setConfirmAlertSend(true)
+    }
+
+    const cancelConfirmAlert = () => {
+        setConfirmAlertSend(false)
+    }
+    const handleSubmitAlert = () => {
+        // sends the data to the api endpoint or to firebase api endpoint thru sdk
+        const toastId = toast.loading('Sending Alert Signal...')
+        try {
+            setConfirmAlertSend(!confirmAlertSend)
+            setTimeout(() => {
+                toast.dismiss(toastId)
+                toast.success('Alert Published!')
+            }, 2000);
+        } catch (error) {
+            toast.error('alert has failed!')
+        }
     }
   return (
     <section className='p-6'>
@@ -90,9 +122,25 @@ const AlertsPage: React.FC = () => {
                   </div>
                 </PopoverContent>
               </Popover>
-            <Button asChild>
-            <a href="mailto:support@silfrica.com" className='w-[165px] bg-[#FFB13C] text-white flex justify-center items-center'>Send now</a>
-            </Button>
+            <Dialog open={confirmAlertSend} onOpenChange={openConfirmAlert}>
+                <DialogTrigger asChild>
+                    <Button className='w-[165px] bg-[#FFB13C]'>Send now</Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                    <DialogTitle className="text-center">Do you want to issue this alert?</DialogTitle>
+                    <DialogDescription className="text-center">
+                    Issuing alerts can cause panic for recipients in case of emergencies, so ensure that this alert is key to stabilizing the ongoing situation
+                    </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-evenly">
+                    <Button variant="outline" onClick={cancelConfirmAlert}>
+                        Cancel
+                    </Button>
+                    <Button className="bg-[#03CF79]" onClick={handleSubmitAlert}>Confirm</Button>
+                    </DialogFooter>
+                </DialogContent>
+                </Dialog>
             </div>
         </div>
         <br />
@@ -125,6 +173,7 @@ const AlertsPage: React.FC = () => {
               </Select>
             </div>
         </div>
+        <Toaster />
     </section>
   )
 }
