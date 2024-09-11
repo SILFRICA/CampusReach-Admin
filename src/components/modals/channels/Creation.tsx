@@ -15,7 +15,7 @@ import axios from 'axios'
 import { HomeDataResponse } from '@/components/pages/dashboard/home/response'
 
 interface FormData {
-  type: "public" | "private";
+  type: "Public" | "Private";
   name: string;
   description: string;
   category: string;
@@ -52,7 +52,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
     const {userData} = useContext(AuthContext)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
-    type: "public",
+    type: "Public",
     name: "",
     description: "",
     category: "",
@@ -86,7 +86,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
     if (!open) {
       setStep(1)
       setFormData({
-        type: "public",
+        type: "Public",
         name: "",
         description: "",
         category: "",
@@ -282,7 +282,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
         return (
           <RadioGroup
             defaultValue={formData.type}
-            onValueChange={(value: "public" | "private") => setFormData(prev => ({ ...prev, type: value }))}
+            onValueChange={(value: "Public" | "Private") => setFormData(prev => ({ ...prev, type: value }))}
             className="space-y-4"
           >
             {["public", "private"].map((type, index) => (
@@ -340,12 +340,12 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
                   <SelectValue placeholder="Tap to select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="administration">Administration</SelectItem>
-                  <SelectItem value="faculty">Faculty</SelectItem>
-                  <SelectItem value="department">Department</SelectItem>
-                  <SelectItem value="school official">School Official</SelectItem>
-                  <SelectItem value="association">Association</SelectItem>
-                  <SelectItem value="school partner">School Partner</SelectItem>
+                  <SelectItem value="Administration">Administration</SelectItem>
+                  <SelectItem value="Faculty">Faculty</SelectItem>
+                  <SelectItem value="Department">Department</SelectItem>
+                  <SelectItem value="School Official">School Official</SelectItem>
+                  <SelectItem value="Association">Association</SelectItem>
+                  <SelectItem value="School Partner">School Partner</SelectItem>
                 </SelectContent>
               </Select>
             </div>
