@@ -199,6 +199,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
             console.error("An unexpected error occurred. Please try again.");
           }
           console.error("channel error:", error);
+          setStep(3)
     } finally {
       setIsLoading(false);
     }
@@ -259,6 +260,7 @@ export default function CreateChannelModal({ open, onOpenChange }: CreateChannel
       setIsLoading(false);
       setTimeout(() => {
         onOpenChange(false);
+        window.location.reload();
       }, 1500);
     }
   };
