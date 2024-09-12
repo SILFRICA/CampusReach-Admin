@@ -285,7 +285,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
             onValueChange={(value: "Public" | "Private") => setFormData(prev => ({ ...prev, type: value }))}
             className="space-y-4"
           >
-            {["public", "private"].map((type, index) => (
+            {["Public", "Private"].map((type, index) => (
               <div
                 key={type}
                 className={cn(
