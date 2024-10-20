@@ -74,7 +74,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
   const [isResponse, setIsResponse] = useState<ChannelCreatedResponse>({
     id: "",
     channel_id: "",
-    admin_id: userData.user.id,
+    admin_id: userData && userData.user ? userData.user.id : "",
     name: "",
     type: "",
     description: ""
@@ -153,7 +153,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
 
     // Prepare form data
     const form = new FormData();
-    form.append('user_id', userData.user.id);  // Add user_id
+    form.append('user_id', userData?.user?.id ?? '');  // Add user_id
     form.append('channel_id', ch_id);  // Add channel_id
     form.append('name', formData.name);
     form.append('description', formData.description);
@@ -173,7 +173,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${userData.token}`
+          'Authorization': `Bearer ${userData?.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
         }});
 
@@ -232,7 +232,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userData.token}`
+          Authorization: `Bearer ${userData?.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
         }});
 
