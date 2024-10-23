@@ -2,10 +2,11 @@ import React, { useEffect, useState, useContext } from "react";
 import { createPortal } from 'react-dom';
 import Greeting from '@/components/Greeting';
 import CreateChannelModal from "@/components/modals/channels/Creation";
+import LogoWithText from "../../../../assets/logoAnimate.svg";
 import HomeSection from "./section";
 import ManageAdmins from "../admins/ManageAdmins";
 import ChannelSection from "../channels/ChannelSection";
-import { AuthContext } from "@/context/AuthContext"; // Import your AuthContext
+import { AuthContext } from "@/context/AuthContext"; 
 import { HomeDataResponse } from "./response";
 import apiUrl from "@/data/axios";
 import axios from "axios";
@@ -28,7 +29,7 @@ const HomePage: React.FC = () => {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${userData.user.token}`
+            'Authorization': `Bearer ${userData.token}`
           }
         });
 
@@ -64,7 +65,15 @@ const HomePage: React.FC = () => {
   }, [userData]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center w-full h-screen">
+        <img
+          src={LogoWithText}
+          alt="logo"
+          className="animate-breathing w-[150.86px]"
+        />
+      </div>
+    );
   }
 
   return (

@@ -182,7 +182,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
         user_id,           // Include user_id
         sub_channel_id,    // Include sub_channel_id
       }, { headers: {
-        'Authorization': `Bearer ${userData.token}`
+        'Authorization': `Bearer ${userData?.token}`
       }});
 
       if (response.status === 200) {
@@ -203,7 +203,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
         user_id,           // Include user_id
         sub_channel_id,    // Include sub_channel_id
       }, { headers: {
-        'Authorization': `Bearer ${userData.token}`
+        'Authorization': `Bearer ${userData?.token}`
       }});
 
       if (response.status === 200) {
@@ -280,7 +280,7 @@ const flattenedData: AdminData[] = AdminsData.flatMap((admin) =>
                     admin.channel_id,
                     admin.sub_channel_id,
                   );
-                  const isCurrentUser = admin.email === userData.user.email;
+                  const isCurrentUser = userData && admin.email === userData.user.email;
                   const isSuspended =
                     admin.suspended_admins?.includes(admin.id) ?? false;
 

@@ -1,9 +1,9 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
 
 interface User {
+    email: string;
     lastname: ReactNode;
-    id: string; // Define id as a string
-    token: string; // Define token as a string
+    id: string;
 }
 
 interface Institution {

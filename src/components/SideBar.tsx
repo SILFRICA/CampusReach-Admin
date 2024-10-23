@@ -1,8 +1,8 @@
-import React, { forwardRef, useContext, useState } from "react";
+import React, { forwardRef, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import LogoWithText from "../assets/logo_with_text.png";
 import SideBarData from "../data/sidebar.json";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 interface SideBarProps {
   isOpen: boolean;
@@ -18,18 +18,21 @@ interface User {
 const SideBar = forwardRef<HTMLDivElement, SideBarProps & React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
   const { userData } = useContext(AuthContext);
 
-  // Optional fallback for userData
+  // If userData is not available, show the loading animation
   if (!userData) {
-    return <div>Loading...</div>; // Customize as needed
+    return (
+      <div className="flex justify-center items-center w-full h-screen">
+        <img
+          src={LogoWithText}
+          alt="logo"
+          className="animate-breathing w-[120px]"
+        />
+      </div>
+
+    );
   }
 
   const user = userData.user as unknown as User;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [activeTab, setActiveTab] = useState<string>("Home");
-
-  const handleActiveTab = (tab: string) => {
-    setActiveTab(tab);
-  };
 
   return (
     <div
@@ -52,13 +55,14 @@ const SideBar = forwardRef<HTMLDivElement, SideBarProps & React.HTMLAttributes<H
                   <span className="text-xl font-semibold">{nav.title}</span>
                 </div>
               ) : (
-                <Link
+                <NavLink
                   to={nav.url}
-                  className={`${activeTab === nav.title ? 'text-[#03CF79]' : 'text-black'}`}
-                  onClick={() => handleActiveTab(nav.title)}
+                  className={({ isActive }) =>
+                    isActive ? 'text-[#03CF79]' : 'text-black'
+                  }
                 >
                   <span className="text-xl font-semibold">{nav.title}</span>
-                </Link>
+                </NavLink>
               )}
             </li>
           ))}
