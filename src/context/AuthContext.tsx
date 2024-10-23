@@ -1,88 +1,92 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, ReactNode, useEffect, useState } from 'react';
+
+interface User {
+    email: string;
+    lastname: ReactNode;
+    id: string;
+}
+
+interface Institution {
+    id: number;
+    name: string;
+}
 
 interface UserDataProps {
-    user: object,
-    institution: {
-        id: number,
-        name: string
-    }
-    token: string
+    user: User; // Use the User interface
+    institution: Institution; // Use the Institution interface
+    token: string;
 }
 
 interface AuthContextProps {
-  isAuthenticated: boolean;
-  login: (userData: UserDataProps) => void;
-  updateUser: (newData: Partial<UserDataProps>) => void;
-  logout: () => void;
-  userData: any;
+    isAuthenticated: boolean;
+    login: (userData: UserDataProps) => void;
+    updateUser: (newData: Partial<UserDataProps>) => void;
+    logout: () => void;
+    userData: UserDataProps | null; // Set to null instead of an empty object
 }
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+    children: React.ReactNode;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
-  isAuthenticated: false,
-  login: () => {},
-  updateUser: () => {},
-  logout: () => {},
-  userData: {},
+    isAuthenticated: false,
+    login: () => {},
+    updateUser: () => {},
+    logout: () => {},
+    userData: null,
 });
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         const storedUserData = sessionStorage.getItem('userData');
         return storedUserData ? true : false;
-      });
+    });
 
-      const [userData, setUserData] = useState<UserDataProps | object>(() => {
+    const [userData, setUserData] = useState<UserDataProps | null>(() => {
         const storedUserData = sessionStorage.getItem('userData');
-        return storedUserData ? JSON.parse(storedUserData) : {};
-      });
+        return storedUserData ? JSON.parse(storedUserData) : null; // Default to null
+    });
 
-  const login = (data: UserDataProps) => {
-    sessionStorage.setItem('userData', JSON.stringify(data));
-    setIsAuthenticated(true);
-    setUserData(data);
-  };
+    const login = (data: UserDataProps) => {
+        sessionStorage.setItem('userData', JSON.stringify(data));
+        setIsAuthenticated(true);
+        setUserData(data);
+    };
 
-  const updateUser = (data: Partial<UserDataProps>) => {
-    setUserData((prevState) => {
-        if (!prevState) return {};
+    const updateUser = (data: Partial<UserDataProps>) => {
+        setUserData((prevState) => {
+            if (!prevState) return null;
 
-        const updatedUserData = {
-          ...prevState,
-          user: {
-            ...prevState,
-            ...data,
-          },
-        };
+            const updatedUserData = {
+                ...prevState,
+                user: {
+                    ...prevState.user,
+                    ...data.user, // Update only the user part
+                },
+            };
 
-        sessionStorage.setItem('userData', JSON.stringify(updatedUserData));
-        return updatedUserData;
-      });
-  };
+            sessionStorage.setItem('userData', JSON.stringify(updatedUserData));
+            return updatedUserData;
+        });
+    };
 
-  const logout = () => {
-    sessionStorage.removeItem('userData');
-    setIsAuthenticated(false);
-    setUserData({});
-  };
+    const logout = () => {
+        sessionStorage.removeItem('userData');
+        setIsAuthenticated(false);
+        setUserData(null);
+    };
 
-  useEffect(() => {
-    if (!isAuthenticated || !userData) {
-      setIsAuthenticated(false);
-      sessionStorage.removeItem('userData');
-    }
-  }, [userData, isAuthenticated]);
+    useEffect(() => {
+        if (!isAuthenticated || !userData) {
+            setIsAuthenticated(false);
+            sessionStorage.removeItem('userData');
+        }
+    }, [userData, isAuthenticated]);
 
-  const authContextValue = {
-    isAuthenticated,
-    login,
-    updateUser,
-    logout,
-    userData,
-  };
-
-  return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={{ isAuthenticated, login, updateUser, logout, userData }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };

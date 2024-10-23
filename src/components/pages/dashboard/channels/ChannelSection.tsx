@@ -32,11 +32,16 @@ const ChannelSection: React.FC = () => {
       alert("Please upload an Excel sheet.");
       return;
     }
-
+  
+    if (!userData) {
+      alert("User data is not available.");
+      return;
+    }
+  
     const formData = new FormData();
     formData.append("file", file);
     formData.append("user_id", userData.user.id);
-
+  
     try {
       const API_URL = apiUrl("production");
       await axios.post(`${API_URL}/api/subchannels/bulk`, formData, {
@@ -157,7 +162,7 @@ const ChannelSection: React.FC = () => {
               className="flex items-center justify-center gap-2 flex-wrap cursor-pointer w-full"
               onSubmit={handleSubmit}
             >
-              <input type="hidden" name="user_id" value={userData.user.id} />
+              <input type="hidden" name="user_id" value={userData?.user?.id} />
               <label htmlFor="excelSheet">Upload Sheet</label>
               <input
                 type="file"

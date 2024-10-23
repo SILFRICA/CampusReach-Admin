@@ -56,7 +56,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
       await axios.post(
         `${API_URL}/api/logout`,
         {},
-        { headers: { Authorization: `Bearer ${userData.token}` } },
+        { headers: { Authorization: `Bearer ${userData!.token}` } },
       );
 
       setTimeout(() => {
@@ -82,7 +82,7 @@ const NavBar: React.FC<NavBarProps> = ({ sidebarToggle }) => {
       </button>
 
       <span className="ml-3 text-xs md:text-xl font-semibold text-black">
-        {userData.institution.name ?? "Silfrica..."}
+        {userData?.institution?.name ?? "Silfrica..."}
       </span>
 
       <ul className="ml-auto flex items-center">

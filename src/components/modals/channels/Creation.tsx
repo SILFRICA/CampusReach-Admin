@@ -8,8 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
-import toast, {Toaster} from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import { AuthContext } from '@/context/AuthContext'
+import LogoWithText from "../../../assets/logoAnimate.svg";
 import apiUrl from '@/data/axios'
 import axios from 'axios'
 import { HomeDataResponse } from '@/components/pages/dashboard/home/response'
@@ -34,22 +35,22 @@ interface FormData {
 }
 
 interface CreateChannelModalProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    data: HomeDataResponse | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  data: HomeDataResponse | null;
 }
 
 interface ChannelCreatedResponse {
-    id: number|string;
-    channel_id: number|string;
-    admin_id: number|string;
-    name: string;
-    type: string;
-    description: string;
+  id: number | string;
+  channel_id: number | string;
+  admin_id: number | string;
+  name: string;
+  type: string;
+  description: string;
 }
 
 export default function CreateChannelModal({ open, onOpenChange, data }: CreateChannelModalProps) {
-    const {userData} = useContext(AuthContext)
+  const { userData } = useContext(AuthContext)
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState<FormData>({
     type: "Public",
@@ -74,7 +75,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
   const [isResponse, setIsResponse] = useState<ChannelCreatedResponse>({
     id: "",
     channel_id: "",
-    admin_id: userData.user.id,
+    admin_id: userData && userData.user ? userData.user.id : "",
     name: "",
     type: "",
     description: ""
@@ -115,7 +116,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
     if (step < 5) {
       setStep(step + 1)
     } else {
-        onOpenChange(false)
+      onOpenChange(false)
     }
   }
 
@@ -133,27 +134,27 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
 
   const handleProceedWithAdmin = () => {
     if (step === 4) {
-        handleSubmit()
-        setIsLoading(false)
-        setStep(step + 1)
+      handleSubmit()
+      setIsLoading(false)
+      setStep(step + 1)
     }
   }
 
   const handleSubmit = async () => {
     setIsLoading(true);
     let ch_id = '';
-    if (data?.channels_managed !== null){
-        data?.channels_managed.forEach((id, index) => {
-            if (index === 0) {
-                ch_id = id.toString()
-            }
-            return;
-        });
+    if (data?.channels_managed !== null) {
+      data?.channels_managed.forEach((id, index) => {
+        if (index === 0) {
+          ch_id = id.toString()
+        }
+        return;
+      });
     }
 
     // Prepare form data
     const form = new FormData();
-    form.append('user_id', userData.user.id);  // Add user_id
+    form.append('user_id', userData?.user?.id ?? '');  // Add user_id
     form.append('channel_id', ch_id);  // Add channel_id
     form.append('name', formData.name);
     form.append('description', formData.description);
@@ -168,14 +169,15 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
     form.append('type', formData.type);
 
     try {
-        const API_URL = apiUrl("production");
+      const API_URL = apiUrl("production");
       const response = await axios.post(`${API_URL}/api/subchannel`, form, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${userData.token}`
+          'Authorization': `Bearer ${userData?.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
-        }});
+        }
+      });
 
       if (response.status !== 201) {
         toast.error('Failed')
@@ -188,29 +190,29 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
       toast.success('Channel created!')
       setIsSkipped(true)
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-              // Server responded with a status other than 2xx
-              toast.error('process failed')
-              console.error("Process failed. Please try again.");
-            } else if (error.request) {
-              // No response was received from the server
-              toast.error('network error')
-              console.error(
-                "Network error. Please check your connection and try again."
-              );
-            } else {
-              // Something else happened while setting up the request
-              toast.error('unexpected error')
-              console.error("An unexpected error occurred. Please try again.");
-            }
-          } else {
-            // Non-Axios error
-            toast.error('something went wrong')
-            console.error("An unexpected error occurred. Please try again.");
-          }
-          console.error("channel error:", error);
-          setStep(3)
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          toast.error('process failed')
+          console.error("Process failed. Please try again.");
+        } else if (error.request) {
+          // No response was received from the server
+          toast.error('network error')
+          console.error(
+            "Network error. Please check your connection and try again."
+          );
+        } else {
+          // Something else happened while setting up the request
+          toast.error('unexpected error')
+          console.error("An unexpected error occurred. Please try again.");
+        }
+      } else {
+        // Non-Axios error
+        toast.error('something went wrong')
+        console.error("An unexpected error occurred. Please try again.");
+      }
+      console.error("channel error:", error);
+      setStep(3)
     } finally {
       setIsLoading(false);
     }
@@ -219,22 +221,23 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
   const handleAddAdmin = async () => {
     setIsLoading(true);
     const adminInvite = {
-        channel_id: isResponse.channel_id,
-        sub_channel_id: isResponse.id,
-        user_id: isResponse.admin_id,
-        email_invited: formData.adminEmail,
-        email_body: formData.adminInstructions
+      channel_id: isResponse.channel_id,
+      sub_channel_id: isResponse.id,
+      user_id: isResponse.admin_id,
+      email_invited: formData.adminEmail,
+      email_body: formData.adminInstructions
     }
 
     try {
-        const API_URL = apiUrl("production");
+      const API_URL = apiUrl("production");
       const response = await axios.post(`${API_URL}/api/email/invite/user`, adminInvite, {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${userData.token}`
+          Authorization: `Bearer ${userData?.token}`
           // No need for 'Content-Type' here, fetch automatically sets it for FormData
-        }});
+        }
+      });
 
       if (response.status !== 200) {
         toast.error('Failed to add')
@@ -245,28 +248,28 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
       console.log(channel);
       toast.success('Admin Invited!')
     } catch (error) {
-        if (axios.isAxiosError(error)) {
-            if (error.response) {
-              // Server responded with a status other than 2xx
-              toast.error('process failed')
-              console.error("Process failed. Please try again.");
-            } else if (error.request) {
-              // No response was received from the server
-              toast.error('network error')
-              console.error(
-                "Network error. Please check your connection and try again."
-              );
-            } else {
-              // Something else happened while setting up the request
-              toast.error('unexpected error')
-              console.error("An unexpected error occurred. Please try again.");
-            }
-          } else {
-            // Non-Axios error
-            toast.error('something went wrong')
-            console.error("An unexpected error occurred. Please try again.");
-          }
-          console.error("admin add error:", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          toast.error('process failed')
+          console.error("Process failed. Please try again.");
+        } else if (error.request) {
+          // No response was received from the server
+          toast.error('network error')
+          console.error(
+            "Network error. Please check your connection and try again."
+          );
+        } else {
+          // Something else happened while setting up the request
+          toast.error('unexpected error')
+          console.error("An unexpected error occurred. Please try again.");
+        }
+      } else {
+        // Non-Axios error
+        toast.error('something went wrong')
+        console.error("An unexpected error occurred. Please try again.");
+      }
+      console.error("admin add error:", error);
     } finally {
       setIsLoading(false);
       setTimeout(() => {
@@ -277,7 +280,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
   };
 
   const renderStepContent = () => {
-    switch(step) {
+    switch (step) {
       case 1:
         return (
           <RadioGroup
@@ -301,9 +304,9 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
                     className="text-base font-semibold capitalize cursor-pointer"
                   >
                     {type}
-                  <p className="text-xs sm:text-sm text-gray-500">
-                    {typeDesc[index]}
-                  </p>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                      {typeDesc[index]}
+                    </p>
                   </Label>
                 </div>
                 <RadioGroupItem
@@ -330,7 +333,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
               <Label>Profile Image</Label>
               <div className="bg-[#DDF6EC] text-xs sm:text-sm font-medium border border-[#03CF79] p-4 text-center rounded-md">
                 <Label htmlFor='profileImage' className='w-full'>Tap to select 1280x1280 (recommended)</Label>
-                <input type='file' name='profileImage' id='profileImage' className='sr-only'/>
+                <input type='file' name='profileImage' id='profileImage' className='sr-only' />
               </div>
             </div>
             <div>
@@ -431,7 +434,7 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
           <DialogTitle className="text-center">
             <span>New channel</span>
           </DialogTitle>
-            <span className="text-sm text-muted-foreground text-right">{step}/5</span>
+          <span className="text-sm text-muted-foreground text-right">{step}/5</span>
         </DialogHeader>
         <div className="pb-4">
           {renderStepContent()}
@@ -441,7 +444,22 @@ export default function CreateChannelModal({ open, onOpenChange, data }: CreateC
           <Button onClick={() => {
             step > 4 ? handleAddAdmin() : step > 1 && step === 4 ? handleProceedWithAdmin() : handleNext()
           }} disabled={isLoading} className='bg-[#03CF79]'>
-            {isLoading ? "Loading..." : step < 4 ? "Next" : step === 4 ? "Proceed" : "Add admin"}
+            {isLoading ? (
+              <div className="flex justify-center items-center w-full h-screen">
+                <img
+                  src={LogoWithText}
+                  alt="logo"
+                  className="animate-breathing w-[150.86px]"
+                />
+              </div>
+            ) : step < 4 ? (
+              "Next"
+            ) : step === 4 ? (
+              "Proceed"
+            ) : (
+              "Add admin"
+            )}
+
           </Button>
         </DialogFooter>
       </DialogContent>
