@@ -102,8 +102,8 @@ const ManageAdmins: React.FC = () => {
   };
 
   const resetModalState = () => {
-    setVisibleActivityItems(5);
-    setVisiblePendingItems(5);
+    setVisibleActivityItems(15);
+    setVisiblePendingItems(15);
   };
 
   const handleModalClose = (type: 'activity' | 'pending') => {
