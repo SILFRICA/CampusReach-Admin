@@ -13,14 +13,13 @@ const AdminTable: React.FC<AdminTableProps> = ({headers, children}) => {
             {headers.map((header) => (
                 <th
                     key={header}
-                    className="whitespace-nowrap px-4 py-2 font-medium text-gray-900"
+                    className="whitespace-nowrap px-4 py-4 font-medium text-gray-900"
                 >
                     {header}
                 </th>
             ))}
             </tr>
         </thead>
-        <br />
 
         <tbody className="divide-y border border-[#0E1428]">
             {children}

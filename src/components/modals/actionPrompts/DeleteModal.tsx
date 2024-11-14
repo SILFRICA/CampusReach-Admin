@@ -4,6 +4,8 @@ import APModal from "./Modal";
 interface DeleteProps {
   isOpen: boolean;
   onClose: () => void;
+  onConfirm: () => Promise<void>;
+  itemId: string | number;
   children: React.ReactNode;
 }
 

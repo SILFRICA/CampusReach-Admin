@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { channels as channelData, Channel } from "../channels/channelData";
+import { Channel, channelData } from "../channels/channelData";
 import ArrowDownChannel from "@/assets/Arrow-downChannel.svg";
 import Filter from "@/assets/Filter.svg";
 
@@ -17,9 +17,9 @@ const NewChannel = () => {
 
         let filtered = channelData;
         if (value === "Pending") {
-            filtered = channelData.filter(channel => channel.action.message === "Resend");
+            filtered = channelData.filter((channel: { action: { message: string; }; }) => channel.action.message === "Resend");
         } else if (value === "Suspended") {
-            filtered = channelData.filter(channel => channel.action.suspend === "Suspend");
+            filtered = channelData.filter((channel: { action: { suspend: string; }; }) => channel.action.suspend === "Suspend");
         }
 
         setFilteredChannels(filtered);

@@ -1,4 +1,5 @@
 export interface AdminData {
+    state: string;
     id: number;
     email: string;
     name: string;
