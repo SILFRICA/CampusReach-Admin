@@ -17,6 +17,8 @@ const HomePage: React.FC = () => {
   const [homeData, setHomeData] = useState<HomeDataResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -89,7 +91,7 @@ const HomePage: React.FC = () => {
         <>
           <HomeSection data={homeData} />
           <br />
-          <ManageAdmins data={homeData} />
+          <ManageAdmins />
           <br />
         </>
       )}
