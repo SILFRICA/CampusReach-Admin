@@ -5,7 +5,6 @@ import CreateChannelModal from "@/components/modals/channels/Creation";
 import LogoWithText from "../../../../assets/logoAnimate.svg";
 import HomeSection from "./section";
 import ManageAdmins from "../admins/ManageAdmins";
-import ChannelSection from "../channels/ChannelSection";
 import { AuthContext } from "@/context/AuthContext"; 
 import { HomeDataResponse } from "./response";
 import apiUrl from "@/data/axios";
@@ -95,7 +94,7 @@ const HomePage: React.FC = () => {
           <br />
         </>
       )}
-      <ChannelSection />
+      
       {createPortal(
         <CreateChannelModal open={isOpen} data={homeData} onOpenChange={setIsOpen} />,
         document.body
