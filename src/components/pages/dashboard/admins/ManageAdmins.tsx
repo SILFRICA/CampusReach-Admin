@@ -172,13 +172,13 @@ const ManageAdmins: React.FC = () => {
                   <td className="border border-gray-200 px-6 py-3">
                     <button
                       onClick={() => handleResend(channel.email)}
-                      className="mr-4 text-blue-500 hover:text-blue-700"
+                      className="mr-4 text-black bg-green-400 px-4 py-1 hover:text-white"
                     >
                       Resend
                     </button>
                     <button
                       onClick={() => openDeleteModal(channel.channelName)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-black bg-red-600 px-4 py-1 hover:text-white"
                     >
                       Delete
                     </button>

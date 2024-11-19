@@ -2,11 +2,11 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  // Navigate,
+  Navigate,
 } from "react-router-dom";
 import "./App.css";
 // import { useContext } from 'react';
-import { AuthProvider} from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./context/PrivateRoute";
 import PageLayout from './components/pages/PageLayout';
 import LoginSection from "./components/pages/auth/LoginSection";
@@ -30,18 +30,22 @@ function App() {
           {/* Login Routes */}
           <Route path="/" element={<LoginSection />} />
           <Route path="/login" element={<LoginSection />} />
-          
+
           {/* Protected Dashboard Routes */}
-          <Route path="/dashboard" element={<PrivateRoute><PageLayout/></PrivateRoute>}>
-            <Route index element={<HomePage/>}/>
-            <Route path="home" element={<HomePage/>}/>
-            <Route path="insights" element={<InsightsPage />}/>
-            <Route path="alerts" element={<AlertsPage />}/>
+          <Route path="/dashboard" element={<PrivateRoute><PageLayout /></PrivateRoute>}>
+            {/* Redirect /dashboard to /dashboard/home */}
+            <Route index element={<Navigate to="home" replace />} />
+            <Route path="home" element={<HomePage />} />
+            <Route path="insights" element={<InsightsPage />} />
+            <Route path="alerts" element={<AlertsPage />} />
             <Route path="channels" element={<NewChannel />} />
           </Route>
+
+          {/* 404 Page */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Router>
+
     </AuthProvider>
   );
 }
