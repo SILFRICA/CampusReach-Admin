@@ -9,7 +9,7 @@ const AdminTable: React.FC<AdminTableProps> = ({headers, children}) => {
   return (
     <table className="min-w-full bg-white text-sm">
         <thead className="text-left">
-            <tr className='border border-[##03CF79] bg-[#DFF9EE]'>
+            <tr className='bg-[#03cf7a7b] border-2 border-[#03CF79]'>
             {headers.map((header) => (
                 <th
                     key={header}
