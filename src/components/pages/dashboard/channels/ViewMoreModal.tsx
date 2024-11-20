@@ -177,13 +177,6 @@ const ViewMoreModal: React.FC<ViewMoreModalProps> = ({
               Loading more items...
             </div>
           )}
-          
-          {/* End of list indicator */}
-          {!hasMore && data.length > 0 && (
-            <div className="py-4 text-center text-gray-500">
-              No more items to load
-            </div>
-          )}
         </div>
 
         {/* Modal footer */}

@@ -142,7 +142,7 @@ const LoginSection: React.FC = () => {
                 />
               </div>
 
-              <div className="col-span-6 sm:col-span-3">
+              <div className="col-span-6">
                 <label
                   htmlFor="Password"
                   className="block text-sm font-medium text-gray-700"
@@ -157,7 +157,7 @@ const LoginSection: React.FC = () => {
                   name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="mt-1 w-full p-2 rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
+                  className="mt-1 w-full  p-2 rounded-md border-gray-200 bg-white text-sm text-gray-700 shadow-sm"
                 />
               </div>
 
